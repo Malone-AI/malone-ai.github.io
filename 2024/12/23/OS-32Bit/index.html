@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="简述&ensp;在这篇博客中，我将分享如何在一个操作系统项目IlanVinograd&#x2F;OS_32Bit中实现 clear 命令，进行清屏，然后重置光标定位到左上角的问题。 开始遇到的问题&ensp;一开始我遇到的问题是 Docker，这个项目的作者提供了 Dockerfile 文件来帮助配置环境，但是国内就连不上 Docker ( QvQ 或许有，但是我暂时不知道怎么搞，放到后续去学吧)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现 Shell 的 clear 命令">
+<meta property="og:url" content="http://example.com/2024/12/23/OS-32Bit/index.html">
+<meta property="og:site_name" content="Hello, this is Malone!">
+<meta property="og:description" content="简述&ensp;在这篇博客中，我将分享如何在一个操作系统项目IlanVinograd&#x2F;OS_32Bit中实现 clear 命令，进行清屏，然后重置光标定位到左上角的问题。 开始遇到的问题&ensp;一开始我遇到的问题是 Docker，这个项目的作者提供了 Dockerfile 文件来帮助配置环境，但是国内就连不上 Docker ( QvQ 或许有，但是我暂时不知道怎么搞，放到后续去学吧)">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-23T03:38:46.000Z">
+<meta property="article:modified_time" content="2024-12-23T04:39:35.550Z">
+<meta property="article:author" content="Malone">
+<meta property="article:tag" content="Malone">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>实现 Shell 的 clear 命令</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Hello, this is Malone!" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/12/18/Hello-this-is-Malone/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/12/23/OS-32Bit/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/12/23/OS-32Bit/&text=实现 Shell 的 clear 命令"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/12/23/OS-32Bit/&is_video=false&description=实现 Shell 的 clear 命令"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=实现 Shell 的 clear 命令&body=Check out this article: http://example.com/2024/12/23/OS-32Bit/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/12/23/OS-32Bit/&name=实现 Shell 的 clear 命令&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/12/23/OS-32Bit/&t=实现 Shell 的 clear 命令"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">简述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">开始遇到的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.</span> <span class="toc-text">修改内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        实现 Shell 的 clear 命令
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Malone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-12-23T03:38:46.000Z" class="dt-published" itemprop="datePublished">2024-12-23</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>&ensp;在这篇博客中，我将分享如何在一个操作系统项目<a target="_blank" rel="noopener" href="https://github.com/IlanVinograd/OS_32Bit">IlanVinograd&#x2F;OS_32Bit</a>中实现 clear 命令，进行清屏，然后重置光标定位到左上角的问题。</p>
+<h2 id="开始遇到的问题"><a href="#开始遇到的问题" class="headerlink" title="开始遇到的问题"></a>开始遇到的问题</h2><p>&ensp;一开始我遇到的问题是 Docker，这个项目的作者提供了 Dockerfile 文件来帮助配置环境，但是国内就连不上 Docker ( QvQ 或许有，但是我暂时不知道怎么搞，放到后续去学吧)。所以我就按照 Dockerfile 文件在本地安装了依赖，在本地编译所需要的工具，像 binutils 和 gcc-i686-elf ，并配置好环境变量，很顺利地在本地运行起了项目，不得不说项目作者很有水平。</p>
+<p>&ensp;在操作系统的 Shell 中，clear 命令用于清空屏幕并将光标重置到左上角。一开始我是在 Code&#x2F;Kernel&#x2F;Sources&#x2F;shell.c 文件中的 handleBackgroundColor 函数中识别 clear 命令，然后调用 clearScreen 函数进行清屏，在调用 setCursorPosition 函数将光标重置到左上角。但是这样进行处理有一点问题。 输入 clear 命令后要按下回车，有一个专门的函数 handle_enter 函数会覆盖掉我对 setCursorPosition 函数的调用， handle_enter 函数会自动将光标定位到下一行开头。所以我就在这个函数里也对 clear 命令进行识别，然后刷新输入缓冲区，退出即可。</p>
+<p>&ensp;正当我兴致勃勃的想要向项目作者申请 issue 的 assign 时，并发起 Pull request 时，我不小心在本地合并分支到了 main 分支。虽然我学习过 git 的使用，但是确实用的太少了，导致很多命令不熟悉，进行了误操作，后续写一篇博客总结总结。所以又重新 clone 了项目， 进行修改。这次我突然想到为何要在 handleBackgroundColor 函数里识别 clear 命令呢？直接在 handle_enter 统一处理所有的 shell 命令不就行了。这里补充一点，项目作者实现了这个 32 位操作系统的整体框架，大部分 shell 命令都没有实现。在我进行的时候仅仅只实现了一个 test 测试命令。当然正是这个命令启发了我，让我使用最少的代码、最小的修改完成了这个功能。一开始我还使用关中断的方式实现原子操作来实现清屏与光标重定位，虽然没成功，但 exp++，哈哈。</p>
+<h2 id="修改内容"><a href="#修改内容" class="headerlink" title="修改内容"></a>修改内容</h2><ol>
+<li>更新 handle_enter 函数<br>&ensp;首先，我在 handle_enter 函数中添加了对 clear 命令的处理逻辑。具体来说，当检测到输入的命令不是 clear 时，将光标移动到下一行的开头。否则，清空屏幕并将光标重置到左上角。</li>
+</ol>
+<p>修改前：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">handle_enter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">uint16_t</span> row = keyboard_cursor_position / VGA_COLS;</span><br><span class="line">    <span class="type">uint16_t</span> col = keyboard_cursor_position % VGA_COLS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear the blinking cursor before processing</span></span><br><span class="line">    <span class="built_in">setCursorPosition</span>(row, col);</span><br><span class="line">    <span class="built_in">putc</span>(<span class="string">&#x27; &#x27;</span>, COLOR_BLACK_ON_WHITE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Shell Functions</span></span><br><span class="line">    <span class="built_in">scrollIfNeeded</span>(row);</span><br><span class="line">    <span class="built_in">handleBackgroundColor</span>(inputBuffer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//test temp</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>((<span class="type">uint8_t</span>*)inputBuffer, (<span class="type">uint8_t</span>*)<span class="string">&quot;test&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">create_task</span>((<span class="type">uintptr_t</span>)test);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// end test temp</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Move cursor to the next line</span></span><br><span class="line">    row++;</span><br><span class="line">    <span class="keyword">if</span> (row &gt;= VGA_ROWS) &#123;</span><br><span class="line">        <span class="comment">// Scroll again if we&#x27;re still at the last row</span></span><br><span class="line">        <span class="built_in">scroll_screen</span>();</span><br><span class="line">        row = VGA_ROWS - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    keyboard_cursor_position = row * VGA_COLS;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setCursorPosition</span>(row, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset input buffer to default size</span></span><br><span class="line">    <span class="built_in">free</span>(inputBuffer); <span class="comment">// Free the current buffer</span></span><br><span class="line">    inputBufferSize = <span class="number">256</span>; <span class="comment">// Reset the buffer size</span></span><br><span class="line">    inputBuffer = (<span class="type">char</span>*)<span class="built_in">malloc</span>(inputBufferSize); <span class="comment">// Allocate a new buffer</span></span><br><span class="line">    <span class="keyword">if</span> (!inputBuffer) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: Could not reallocate input buffer.\n&quot;</span>, RED_ON_BLACK_WARNING);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inputBuffer[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">// Initialize the buffer</span></span><br><span class="line">    inputBufferIndex = <span class="number">0</span>;  <span class="comment">// Reset the index</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>修改后</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">handle_enter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">uint16_t</span> row = keyboard_cursor_position / VGA_COLS;</span><br><span class="line">    <span class="type">uint16_t</span> col = keyboard_cursor_position % VGA_COLS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear the blinking cursor before processing</span></span><br><span class="line">    <span class="built_in">setCursorPosition</span>(row, col);</span><br><span class="line">    <span class="built_in">putc</span>(<span class="string">&#x27; &#x27;</span>, COLOR_BLACK_ON_WHITE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Shell Functions</span></span><br><span class="line">    <span class="built_in">scrollIfNeeded</span>(row);</span><br><span class="line">    <span class="built_in">handleBackgroundColor</span>(inputBuffer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//test temp</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>((<span class="type">uint8_t</span>*)inputBuffer, (<span class="type">uint8_t</span>*)<span class="string">&quot;test&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">create_task</span>((<span class="type">uintptr_t</span>)test);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// end test temp</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Move cursor to the next line if it is not clear command</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>((<span class="type">uint8_t</span>*)inputBuffer, (<span class="type">uint8_t</span>*)<span class="string">&quot;clear&quot;</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">        row++;</span><br><span class="line">        <span class="keyword">if</span> (row &gt;= VGA_ROWS) &#123;</span><br><span class="line">            <span class="comment">// Scroll again if we&#x27;re still at the last row</span></span><br><span class="line">            <span class="built_in">scroll_screen</span>();</span><br><span class="line">            row = VGA_ROWS - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        keyboard_cursor_position = row * VGA_COLS;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">setCursorPosition</span>(row, <span class="number">0</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">clearScreen</span>();</span><br><span class="line">        keyboard_cursor_position = <span class="number">2</span> * VGA_COLS;</span><br><span class="line">        <span class="built_in">setCursorPosition</span>(<span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Reset input buffer to default size</span></span><br><span class="line">    <span class="built_in">free</span>(inputBuffer); <span class="comment">// Free the current buffer</span></span><br><span class="line">    inputBufferSize = <span class="number">256</span>; <span class="comment">// Reset the buffer size</span></span><br><span class="line">    inputBuffer = (<span class="type">char</span>*)<span class="built_in">malloc</span>(inputBufferSize); <span class="comment">// Allocate a new buffer</span></span><br><span class="line">    <span class="keyword">if</span> (!inputBuffer) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: Could not reallocate input buffer.\n&quot;</span>, RED_ON_BLACK_WARNING);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inputBuffer[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">// Initialize the buffer</span></span><br><span class="line">    inputBufferIndex = <span class="number">0</span>;  <span class="comment">// Reset the index</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>修复 clearScreen 函数<br>&ensp;接下来，我修复了 clearScreen 函数，使其从行索引 2 开始清除，而不是原先的行索引 3。从索引 2 开始清除是因为项目作者在前两行打印了系统的一些信息。这里估计是项目作者一时疏忽。</li>
+</ol>
+<p>&ensp;为了确保修改后的代码正常工作，我重新编译，使用 qemu 模拟器(有没有大佬教教我怎么掌握这玩意儿，网上教程好少)启动这个系统，接下来：</p>
+<ul>
+<li>在 Shell 中输入 clear 命令并按下回车。</li>
+<li>验证屏幕是否被清空，并且光标是否正确定位到左上角。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&ensp;通过上述修改，我成功实现了 Shell 的 clear 命令。现在，输入 clear 命令后，屏幕会被清空，光标正确定位到左上角，同时不影响其他命令的正常运行。<br>&ensp;简单总结一下 git 的使用。首先将项目仓库 fork 到自己的 GitHub，然后从自己的 Github 将项目 clone 到本地。创建新的分支 new_branch_name（随便取的名字，只是做一个例子），在这个分支上进行修改。修改完毕后 git add 提交修改的文件，然后 git commit -m 对所进行的修改进行描述，使用双引号 “ 开头，可以实现多行描述，最后使用双引号 “ 结尾即可。一般 commit 的第一行对实现的功能或者修改进行大致描述，然后空一行详细描述做出的修改，比如修改了那个文件的那个函数等等。空一行是为了在执行 git log –oneline 时只展示大致描述，而不展示详细描述。做完上述工作后执行 git push origin new_branch_name 命令，然后登陆 Github 到自己的仓库页面，就可以看到 Create pull request 按钮提示你有一个合并请求。点击后像 commit 一样填写 decription 即可。如果你的 commit 只有一个它会自动帮你填写成你的 commit 。否则不会帮你自动填写。这样就算是一个完整的 PR 啦！<br>&ensp;总结一句话就是收获满满！<br>&ensp;希望这篇博客对您有所帮助。如果您有任何问题或建议，欢迎在评论区留言（评论区还没搓好，待续啦）。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">简述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">开始遇到的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.</span> <span class="toc-text">修改内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2024/12/23/OS-32Bit/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2024/12/23/OS-32Bit/&text=实现 Shell 的 clear 命令"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2024/12/23/OS-32Bit/&is_video=false&description=实现 Shell 的 clear 命令"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=实现 Shell 的 clear 命令&body=Check out this article: http://example.com/2024/12/23/OS-32Bit/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2024/12/23/OS-32Bit/&title=实现 Shell 的 clear 命令"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2024/12/23/OS-32Bit/&name=实现 Shell 的 clear 命令&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2024/12/23/OS-32Bit/&t=实现 Shell 的 clear 命令"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    Malone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
