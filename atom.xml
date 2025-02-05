@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-02-04T18:40:01.021Z</updated>
+  <updated>2025-02-05T02:33:47.629Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>leetcode2</title>
+    <link href="http://malone-ai.github.io/2025/02/02/leetcode2/"/>
+    <id>http://malone-ai.github.io/2025/02/02/leetcode2/</id>
+    <published>2025-02-02T02:13:30.000Z</published>
+    <updated>2025-02-05T02:33:47.629Z</updated>
+    
+    <content type="html"><![CDATA[<p>今日Leetcode的每日一题为<a href="https://leetcode.cn/problems/range-addition-ii/description/">598. 区间加法 II</a>。</p><h1>思路分析</h1><p>给一个整数m和一个整数n,对一个矩阵M，初始时矩阵中所有均为0。此外还提供一个操作数组ops，对于C++编程语言，提供的是一个二维vector数组vector&lt;vector<int>&gt;，通过for (auto&amp; op:ops)可以遍历该数组中的元素对，其中每个元素对op为一对数字(a,b)，执行将(0, 0)~(a-1, b-1)的所有元素进行加1操作。遍历完所有元素对后即执行完了操作，要求求出矩阵中最大的整数出现的次数。</p><p>使用模拟的方法的话即遍历操作数组ops对矩阵M进行操作后进行遍历统计，但这种方法的时间复杂度为O(mn)，空间复杂度为O(mn)，效率不高。</p><p>对于每次操作(a, b)影响的区域为(0, 0)~(a-1, b-1)，因而所有的操作共同影响的区域为这些区域的交集。只要求出所有的操作(a, b)中最小的a和最小的b即可，记作min_a和min_b，min_a和min_b决定了所有的操作共同影响的区域，最后很容易联想到最大整数出现的次数为<code>min_a * min_b</code>。</p><h1>复杂度分析</h1><p>这种方法主要是在遍历操作数组ops，ops为二维数组，设它为kX2的数组，那么时间复杂度为O(k)，k即操作的次数。使用了常数个变量，空间复杂度即O(1)。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;今日Leetcode的每日一题为&lt;a href=&quot;https://leetcode.cn/problems/range-addition-ii/description/&quot;&gt;598. 区间加法 II&lt;/a&gt;。&lt;/p&gt;
+&lt;h1&gt;思路分析&lt;/h1&gt;
+&lt;p&gt;给一个整数m和一个整数n</summary>
+      
+    
+    
+    
+    <category term="Leetcode每日一题" scheme="http://malone-ai.github.io/categories/Leetcode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
+    
+    
+    <category term="Leetcode" scheme="http://malone-ai.github.io/tags/Leetcode/"/>
+    
+    <category term="每日一题" scheme="http://malone-ai.github.io/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
+    
+  </entry>
   
   <entry>
     <title>Leetcode 每日一题②：81. 搜索旋转排序数组 II</title>
