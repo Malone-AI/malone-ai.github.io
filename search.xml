@@ -4,6 +4,52 @@
   
     
     <entry>
+      <title>data_structure1</title>
+      <link href="/2025/02/07/data-structure1/"/>
+      <url>/2025/02/07/data-structure1/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题七：47. 全排列 II</title>
+      <link href="/2025/02/06/leetcode6/"/>
+      <url>/2025/02/06/leetcode6/</url>
+      
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/permutations-ii/description/">47. 全排列 II</a>。拿到这道题一眼就想到算法课上的<code>生成排列</code>，当即就使用回溯算法解决，直接提交，直接报错。没注意到题目有条限制条件——存在重复元素。由于题目叫做<code>47. 全排列 II</code>，那我估计肯定存在<code>全排列 I</code>的题目，所有元素均不重复，一找还真有<a href="https://leetcode.cn/problems/permutations/description/">46. 全排列</a>。直接copy代码过去，提交运行，直接通过，爽歪歪。</p><h1>46. 全排列</h1><p>先看看不存在重复元素的<a href="https://leetcode.cn/problems/permutations/description/">46. 全排列</a>，这道题更简单，直接用生成排列的回溯算法，照着抄就行。</p><h2 id="思路分析">思路分析</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">permute</span>(vector&lt;<span class="type">int</span>&gt;&amp; nums) &#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">path</span><span class="params">(nums)</span></span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">perm</span>(<span class="number">0</span>, path, res);</span><br><span class="line">        <span class="keyword">return</span> res;    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">perm</span><span class="params">(<span class="type">int</span> i, vector&lt;<span class="type">int</span>&gt;&amp; path, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; res)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == path.<span class="built_in">size</span>())</span><br><span class="line">            res.<span class="built_in">push_back</span>(path);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = i; j &lt; path.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                <span class="built_in">swap</span>(path[j], path[i]);</span><br><span class="line">                <span class="built_in">perm</span>(i<span class="number">+1</span>, path, res);</span><br><span class="line">                <span class="built_in">swap</span>(path[j], path[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>这部分递归要弄清楚执行过程。调用<code>perm(0, path, res)</code>后，先进行if条件判断，由于i = 0所以进入else中的for循环，从j = 0开始进行循环，第一次循环交换path[j]和path[i]，由于j与i相等，所以相当于没有进行交换，然后调用perm(1, path, res)。继续进行if条件判断，由于i = 1 &lt; path.size()，所以再次进入else，然后进行swap交换（for第一次时j与i相等，等于没换），然后再调用perm(2, path, res)，。。。继续这一过程，最深一层调用的perm时满足i与path.size()相等，此时path就是原始的nums数组，并将其作为一个全排列压入res中。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Leetcode每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Leetcode </tag>
+            
+            <tag> 每日一题 </tag>
+            
+            <tag> 数组 </tag>
+            
+            <tag> 回溯 </tag>
+            
+            <tag> 排序 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Leetcode 每日一题六：90. 子集 II</title>
       <link href="/2025/02/05/leetcode5/"/>
       <url>/2025/02/05/leetcode5/</url>
