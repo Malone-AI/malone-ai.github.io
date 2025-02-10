@@ -4,13 +4,37 @@
   
     
     <entry>
-      <title>leetcode7</title>
+      <title>Leetcode每日一题八：59. 螺旋矩阵 II</title>
       <link href="/2025/02/08/leetcode7/"/>
       <url>/2025/02/08/leetcode7/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/spiral-matrix-ii/description/">59. 螺旋矩阵 II</a>。</p><p>本题参考大神Krahets的解法，这种解法最便于理解，以下是他的Java代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[][] generateMatrix(<span class="type">int</span> n) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">l</span> <span class="operator">=</span> <span class="number">0</span>, r = n - <span class="number">1</span>, t = <span class="number">0</span>, b = n - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span>[][] mat = <span class="keyword">new</span> <span class="title class_">int</span>[n][n];</span><br><span class="line">        <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>, tar = n * n;</span><br><span class="line">        <span class="keyword">while</span>(num &lt;= tar)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> l; i &lt;= r; i++) mat[t][i] = num++; <span class="comment">// left to right.</span></span><br><span class="line">            t++;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> t; i &lt;= b; i++) mat[i][r] = num++; <span class="comment">// top to bottom.</span></span><br><span class="line">            r--;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> r; i &gt;= l; i--) mat[b][i] = num++; <span class="comment">// right to left.</span></span><br><span class="line">            b--;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> b; i &gt;= t; i--) mat[i][l] = num++; <span class="comment">// bottom to top.</span></span><br><span class="line">            l++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mat;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">作者：Krahets</span><br><span class="line">链接：https:<span class="comment">//leetcode.cn/problems/spiral-matrix-ii/solutions/12594/spiral-matrix-ii-mo-ni-fa-she-ding-bian-jie-qing-x/</span></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure><p>Krahets的基本思路是依次填充上边界、右边界、下边界和左边界，每次填充完边界后，对填充的边界进行压缩，见代码中的t++、r–、b–、l++，直到填充完毕为止。</p><p>参考其Java代码给出C++代码：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">generateMatrix</span>(<span class="type">int</span> n) &#123;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">matrix</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n));</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = n - <span class="number">1</span>, up = <span class="number">0</span>, down = n - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> num = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (num &lt;= n * n) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = left; i &lt;= right; i++)</span><br><span class="line">                matrix[up][i] = num++;</span><br><span class="line">            up++;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = up; i &lt;= down; i++)</span><br><span class="line">                matrix[i][right] = num++;</span><br><span class="line">            right--;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = right; i &gt;= left; i--)</span><br><span class="line">                matrix[down][i] = num++;</span><br><span class="line">            down--;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = down; i &gt;= up; i--)</span><br><span class="line">                matrix[i][left] = num++;</span><br><span class="line">            left++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> matrix;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
       
       
+      <categories>
+          
+          <category> Leetcode每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Leetcode </tag>
+            
+            <tag> 每日一题 </tag>
+            
+            <tag> 数组 </tag>
+            
+            <tag> 回溯 </tag>
+            
+            <tag> 排序 </tag>
+            
+            <tag> 矩阵 </tag>
+            
+            <tag> 模拟 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -55,6 +79,8 @@
             <tag> 回溯 </tag>
             
             <tag> 排序 </tag>
+            
+            <tag> 哈希表 </tag>
             
         </tags>
       
