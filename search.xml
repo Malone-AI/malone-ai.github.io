@@ -4,7 +4,105 @@
   
     
     <entry>
-      <title>Leetcode 每日一题：1287. 有序数组中出现次数超过25%的元素</title>
+      <title>Leetcode 每日一题十二：1728. 猫和老鼠 II</title>
+      <link href="/2025/02/19/leetcode12/"/>
+      <url>/2025/02/19/leetcode12/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题二十：624. 数组列表中的最大距离</title>
+      <link href="/2025/02/19/leetcode20/"/>
+      <url>/2025/02/19/leetcode20/</url>
+      
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/maximum-distance-in-arrays/description/">624. 数组列表中的最大距离</a>。</p><p>给定 m 个数组，每个数组都已经按照升序排好序了。</p><p>现在你需要从两个不同的数组中选择两个整数（每个数组选一个）并且计算它们的距离。两个整数 a 和 b 之间的距离定义为它们差的绝对值 |a-b| 。</p><h1>分析理解</h1><p>题目意思很明确，并且每个数组中的数是按升序排列的，我们需要返回不同数组中的两个数的差值的绝对值，并且这个差值的绝对值得是最大的那个。</p><h1>思路分析</h1><p>暴力的做法是枚举所有的差值的绝对值进行比较，返回绝对值最大的那个即可，但是这种做法显然有提升空间，并且效率不高，复杂度为二阶。</p><p>然后我一开始的想法是比较所有数组的最大值和最小值，然后取出这些最大值中的最大值和最小值中的最小值，返回他们的差值即可，但是无法排除他们在同一个数组中的情况。</p><p>紧接着，我先找出最小值中的最小值，然后记录下其下标；然后在寻找最大值中的最大值时，排除这个下标即可。但是依然无法排除某些特殊情况，如对于[[-2],[-3,-2,1]]，会记录数组②中的-3为最小值，记录数组①中的-2为最大值，得到结果1。但应该是1-(-2)=3。</p><p>于是乎我又开始先找出最大值中的最大值，然后最小值中的最小值，但是依然无法排除某些特殊情况。</p><p>再于是乎，我转向了灵茶山艾府的题解。他的思路很清晰，解释得也比较清楚。基本思路是遍历每个数组，先计算当前数组与记录的最小值和记录的最大值之间的最大距离。记录的最小值和最大值为min_a和max_b，然后当前数组的最大值是最后一个元素，它减去min_a可能是一个候选结果；最小值是第一个元素，max_b减去它是一个候选结果。然后更新min_a和max_b。最终即可得到结果。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxDistance</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; arrays)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> m = arrays.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> min_a = arrays[<span class="number">0</span>][<span class="number">0</span>], max_b = arrays[<span class="number">0</span>].<span class="built_in">back</span>();</span><br><span class="line">        <span class="type">int</span> ans = INT_MIN;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; m; ++i) &#123;</span><br><span class="line">            ans = <span class="built_in">max</span>(<span class="built_in">max</span>(max_b - arrays[i].<span class="built_in">front</span>(), arrays[i].<span class="built_in">back</span>() - min_a), ans);</span><br><span class="line">            min_a = <span class="built_in">min</span>(min_a, arrays[i].<span class="built_in">front</span>());</span><br><span class="line">            max_b = <span class="built_in">max</span>(max_b, arrays[i].<span class="built_in">back</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> max(a, b) ((a) &gt; (b) ? (a) : (b))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> min(a, b) ((a) &gt; (b) ? (b) : (a))</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">maxDistance</span><span class="params">(<span class="type">int</span>** arrays, <span class="type">int</span> arraysSize, <span class="type">int</span>* arraysColSize)</span> &#123;</span><br><span class="line">    <span class="type">int</span> min_a = arrays[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="type">int</span> max_b = arrays[<span class="number">0</span>][arraysColSize[<span class="number">0</span>]<span class="number">-1</span>];</span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; arraysSize; ++i) &#123;</span><br><span class="line">        ans = max(max(max_b - arrays[i][<span class="number">0</span>], arrays[i][arraysColSize[i]<span class="number">-1</span>] - min_a), ans);</span><br><span class="line">        min_a = min(min_a, arrays[i][<span class="number">0</span>]);</span><br><span class="line">        max_b = max(max_b, arrays[i][arraysColSize[i]<span class="number">-1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Leetcode 每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+            <tag> 数组 </tag>
+            
+            <tag> 贪心 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题十九：2080. 区间内查询数字的频率</title>
+      <link href="/2025/02/19/leetcode19/"/>
+      <url>/2025/02/19/leetcode19/</url>
+      
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/range-frequency-queries/description/">2080. 区间内查询数字的频率</a>。</p><p>请你设计一个数据结构，它能求出给定子数组内一个给定值的 频率 。</p><p>子数组中一个值的 频率 指的是这个子数组中这个值的出现次数。</p><p>请你实现<code>RangeFreqQuery</code>类：</p><ul><li>RangeFreqQuery(int[] arr) 用下标从 0 开始的整数数组 arr 构造一个类的实例。</li><li>int query(int left, int right, int value) 返回子数组 arr[left…right] 中 value 的 频率 。</li></ul><p>一个 子数组 指的是数组中一段连续的元素。arr[left…right] 指的是 nums 中包含下标 left 和 right 在内 的中间一段连续元素。</p><h1>分析理解</h1><p>目标是实现一个数据结构，该数据结构能够在给定一个数组的情况下，返回在指定下标范围内特定值的频率。指定下标范围记作[left, right]。</p><h1>基本思路</h1><p>基本思路是使用哈希表将数组中的数值与其出现的下标位置建立映射关系，下标位置使用数组就可以存储。然后再使用二分查找，并且是两次二分查找：</p><ul><li>第一次二分查找用于查找下标位置数组中第一个大于right的值。</li><li>第二次二分查找用于查找下标位置数组中第一个小于等于left的值。</li></ul><p>二者进行相减即为所求。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RangeFreqQuery</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    unordered_map&lt;<span class="type">int</span>, vector&lt;<span class="type">int</span>&gt;&gt; hash;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">RangeFreqQuery</span>(vector&lt;<span class="type">int</span>&gt;&amp; arr) &#123;</span><br><span class="line">        <span class="type">int</span> n = arr.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">            hash[arr[i]].<span class="built_in">emplace_back</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> it = hash.<span class="built_in">find</span>(value);</span><br><span class="line">        <span class="keyword">if</span> (it == hash.<span class="built_in">end</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt;&amp; nums = hash[value];</span><br><span class="line">        <span class="comment">// return ranges::upper_bound(nums, right) - ranges::lower_bound(nums, left);</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">upper_bound</span>(nums, right) - <span class="built_in">lower_bound</span>(nums, left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">upper_bound</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">            <span class="type">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt; value)</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">lower_bound</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">            <span class="type">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= value)</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your RangeFreqQuery object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * RangeFreqQuery* obj = new RangeFreqQuery(arr);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj-&gt;query(left,right,value);</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure> <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><p>C语言哈希表库的使用请查看这篇文章<a href="https://malone-ai.github.io/2025/02/18/c1">C语言哈希表库使用</a>。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Leetcode 每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+            <tag> 二分查找 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>C语言哈希表库使用</title>
+      <link href="/2025/02/18/c1/"/>
+      <url>/2025/02/18/c1/</url>
+      
+        <content type="html"><![CDATA[<p>写一篇博客记录一下C语言的哈希表库的使用。哈希表说白了就是Python的字典，我认为二者几乎无异。本文主要讨论的是uthash库。</p><h1>使用步骤</h1><ol><li>安装与包含<br>uthash是一个单文件头库，只需要下载<code>uthash.h</code>库并将其包含在项目中即可。</li></ol><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;uthash.h&quot;</span></span></span><br></pre></td></tr></table></figure><ol start="2"><li>定义结构体<br>定义一个结构体来表示哈希表中的元素，并且结构体中必须包含<code>UT_hash_handle</code>类型的字段。</li></ol><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> key;    <span class="comment">// 键</span></span><br><span class="line">    <span class="type">int</span> value;  <span class="comment">// 值</span></span><br><span class="line">    UT_hash_handle hh; <span class="comment">// 声明一个UT_hash_handle类型的变量</span></span><br><span class="line">&#125;Hash;</span><br></pre></td></tr></table></figure><ol start="3"><li>初始化哈希表<br>哈希表是一个指向Hash类型的指针，初始时设为<code>NULL</code>。</li></ol><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hash* hash = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure><ol start="4"><li>插入元素<br>使用<code>HASH_ADD_INT</code>宏将元素插入哈希表。</li></ol><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hash* item = (Hash*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Hash));</span><br><span class="line">item-&gt;key = key;    <span class="comment">// 此处的key你可以任意指定</span></span><br><span class="line">item-&gt;value = value;    <span class="comment">// 此处的value你可以任意指定</span></span><br><span class="line">HASH_ADD_INT(hash, key, item);</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> C语言 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C语言 </tag>
+            
+            <tag> 哈希表 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题十八：1287. 有序数组中出现次数超过25%的元素</title>
       <link href="/2025/02/17/leetcode18/"/>
       <url>/2025/02/17/leetcode18/</url>
       
@@ -47,9 +145,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 动态规划 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
         </tags>
       
@@ -159,13 +257,13 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 动态规划 </tag>
             
-            <tag> 暴力 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+            <tag> 暴力 </tag>
             
             <tag> 枚举 </tag>
             
@@ -256,9 +354,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
             <tag> 数组 </tag>
             
@@ -335,9 +433,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
             <tag> 数组 </tag>
             
