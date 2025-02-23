@@ -4,13 +4,52 @@
   
     
     <entry>
-      <title>Leetcode 每日一题十二：1728. 猫和老鼠 II</title>
-      <link href="/2025/02/19/leetcode12/"/>
-      <url>/2025/02/19/leetcode12/</url>
+      <title>Leetcode 每日一题二十二：2209. 用地毯覆盖后的最少白色砖块</title>
+      <link href="/2025/02/21/leetcode22/"/>
+      <url>/2025/02/21/leetcode22/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/minimum-white-tiles-after-covering-with-carpets/description/">2209. 用地毯覆盖后的最少白色砖块</a>。</p>]]></content>
       
       
+      <categories>
+          
+          <category> Leetcode 每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题二十一：2595. 奇偶位数</title>
+      <link href="/2025/02/20/leetcode21/"/>
+      <url>/2025/02/20/leetcode21/</url>
+      
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/number-of-even-and-odd-bits/description/">2595. 奇偶位数</a>。</p><p>给你一个正整数 n 。</p><p>用 even 表示在 n 的二进制形式（下标从 0 开始）中值为 1 的偶数下标的个数。</p><p>用 odd 表示在 n 的二进制形式（下标从 0 开始）中值为 1 的奇数下标的个数。</p><p>请注意，在数字的二进制表示中，位下标的顺序 从右到左。</p><p>返回整数数组 answer ，其中 answer = [even, odd] 。</p><h1>思路分析</h1><p>使用int型变量even和odd分别记录，对n进行移位操作，因为记录的是1的个数，因此直接在移位操作后直接加在even或者odd上即可。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">evenOddBit</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> even = <span class="number">0</span>, odd = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> pos = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (n &gt;&gt; pos != <span class="number">0</span>) &#123;</span><br><span class="line">            even += (n &gt;&gt; pos++ &amp; <span class="number">1</span>);</span><br><span class="line">            odd += (n &gt;&gt; pos++ &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;even, odd&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span>* <span class="title function_">evenOddBit</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span>* returnSize)</span> &#123;</span><br><span class="line">    <span class="type">int</span>* res = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">    <span class="built_in">memset</span>(res, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">2</span>);</span><br><span class="line">    *returnSize = <span class="number">2</span>;</span><br><span class="line">    <span class="type">int</span> pos = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (n &gt;&gt; pos != <span class="number">0</span>) &#123;</span><br><span class="line">        res[<span class="number">0</span>] += (n &gt;&gt; pos++ &amp; <span class="number">1</span>);</span><br><span class="line">        res[<span class="number">1</span>] += (n &gt;&gt; pos++ &amp; <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1>复杂度分析</h1><p>时间复杂度为O(log n)，空间复杂度为O(1)。灵茶山艾府就比较厉害了，使用了位掩码的办法，实现了O(1)复杂度的算法。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Leetcode 每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+            <tag> 位运算 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -47,8 +86,8 @@
     
     <entry>
       <title>Leetcode 每日一题十九：2080. 区间内查询数字的频率</title>
-      <link href="/2025/02/19/leetcode19/"/>
-      <url>/2025/02/19/leetcode19/</url>
+      <link href="/2025/02/18/leetcode19/"/>
+      <url>/2025/02/18/leetcode19/</url>
       
         <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/range-frequency-queries/description/">2080. 区间内查询数字的频率</a>。</p><p>请你设计一个数据结构，它能求出给定子数组内一个给定值的 频率 。</p><p>子数组中一个值的 频率 指的是这个子数组中这个值的出现次数。</p><p>请你实现<code>RangeFreqQuery</code>类：</p><ul><li>RangeFreqQuery(int[] arr) 用下标从 0 开始的整数数组 arr 构造一个类的实例。</li><li>int query(int left, int right, int value) 返回子数组 arr[left…right] 中 value 的 频率 。</li></ul><p>一个 子数组 指的是数组中一段连续的元素。arr[left…right] 指的是 nums 中包含下标 left 和 right 在内 的中间一段连续元素。</p><h1>分析理解</h1><p>目标是实现一个数据结构，该数据结构能够在给定一个数组的情况下，返回在指定下标范围内特定值的频率。指定下标范围记作[left, right]。</p><h1>基本思路</h1><p>基本思路是使用哈希表将数组中的数值与其出现的下标位置建立映射关系，下标位置使用数组就可以存储。然后再使用二分查找，并且是两次二分查找：</p><ul><li>第一次二分查找用于查找下标位置数组中第一个大于right的值。</li><li>第二次二分查找用于查找下标位置数组中第一个小于等于left的值。</li></ul><p>二者进行相减即为所求。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RangeFreqQuery</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    unordered_map&lt;<span class="type">int</span>, vector&lt;<span class="type">int</span>&gt;&gt; hash;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">RangeFreqQuery</span>(vector&lt;<span class="type">int</span>&gt;&amp; arr) &#123;</span><br><span class="line">        <span class="type">int</span> n = arr.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">            hash[arr[i]].<span class="built_in">emplace_back</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> it = hash.<span class="built_in">find</span>(value);</span><br><span class="line">        <span class="keyword">if</span> (it == hash.<span class="built_in">end</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt;&amp; nums = hash[value];</span><br><span class="line">        <span class="comment">// return ranges::upper_bound(nums, right) - ranges::lower_bound(nums, left);</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">upper_bound</span>(nums, right) - <span class="built_in">lower_bound</span>(nums, left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">upper_bound</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">            <span class="type">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt; value)</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">lower_bound</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">            <span class="type">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= value)</span><br><span class="line">                right = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your RangeFreqQuery object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * RangeFreqQuery* obj = new RangeFreqQuery(arr);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj-&gt;query(left,right,value);</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure> <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><p>C语言哈希表库的使用请查看这篇文章<a href="https://malone-ai.github.io/2025/02/18/c1">C语言哈希表库使用</a>。</p>]]></content>
       
@@ -62,9 +101,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
             <tag> 二分查找 </tag>
             
@@ -121,33 +160,6 @@
             <tag> Leetcode 每日一题 </tag>
             
             <tag> 数组 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Leetcode 每日一题：63. 不同路径 II</title>
-      <link href="/2025/02/16/leetcode10/"/>
-      <url>/2025/02/16/leetcode10/</url>
-      
-        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/unique-paths-ii/description/">63. 不同路径 II</a>。</p><p>给定一个 m x n 的整数数组 grid。一个机器人初始位于 左上角（即 grid[0][0]）。机器人尝试移动到 右下角（即 grid[m - 1][n - 1]）。机器人每次只能向下或者向右移动一步。</p><p>网格中的障碍物和空位置分别用 1 和 0 来表示。机器人的移动路径中不能包含 任何 有障碍物的方格。</p><p>返回机器人能够到达右下角的不同路径数量。</p><p>测试用例保证答案小于等于 2 * 10^9。</p><p>提示：</p><ul><li>m == obstacleGrid.length</li><li>n == obstacleGrid[i].length</li><li>1 &lt;= m, n &lt;= 100</li><li>obstacleGrid[i][j] 为 0 或 1</li></ul><h1>分析理解</h1><p>提供一个mxn二维数组grid，其中的元素为1代表有障碍物，为0代表无障碍物。机器人初始位于(0, 0)处，目的地为(m-1, n-1)，需要我们求出从(0, 0)到(m-1, n-1)的路径个数。</p><h1>基本思路</h1><p>使用动态规划求解，求解一个二维的dp数组，dp[i+1][j+1]来代表从(0, 0)到(i, j)的路径个数。这里使用dp[i+1][j+1]而不用dp[i][j]是有原因的，主要是该题目有个特殊的几个用例，(0, 0)处为障碍物，导致解为0。</p><p>初始时将dp中所有元素均设为0，然后将dp[0][1]或者dp[1][0]初始化为1。而在求解dp[i+1][j+1]时dp[i+1][j+1] = dp[i+1][j] + dp[i][j+1]，这样当i=0时求得dp[1][1]=dp[0][1]+dp[1][0]即从(0, 0)到(0, 0)的路径条数。这样做的好处就是不用特殊化处理边界，便于撰写代码。最后返回dp[m][n]即(0, 0)到(m-1, n-1)的路径条数。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> m = obstacleGrid.<span class="built_in">size</span>(), n = obstacleGrid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">dp</span>(m<span class="number">+1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n<span class="number">+1</span>, <span class="number">0</span>));</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (obstacleGrid[i][j] == <span class="number">0</span>)</span><br><span class="line">                    dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = dp[i][j<span class="number">+1</span>] + dp[i<span class="number">+1</span>][j];</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">return</span> dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">uniquePathsWithObstacles</span><span class="params">(<span class="type">int</span>** obstacleGrid, <span class="type">int</span> obstacleGridSize, <span class="type">int</span>* obstacleGridColSize)</span> &#123;</span><br><span class="line">    <span class="type">int</span> m = obstacleGridSize, n = *obstacleGridColSize;</span><br><span class="line">    <span class="type">int</span>** dp = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span> *) * (m+<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m + <span class="number">1</span>; ++i) &#123;</span><br><span class="line">        dp[i] = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * (n+<span class="number">1</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n + <span class="number">1</span>; ++j)</span><br><span class="line">            dp[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (obstacleGrid[i][j] == <span class="number">0</span>)</span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i+<span class="number">1</span>][j] + dp[i][j+<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[m][n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1>复杂度</h1><p>时间复杂度和空间复杂度均为O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">n^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>)。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Leetcode 每日一题 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 动态规划 </tag>
-            
-            <tag> Leetcode 每日一题 </tag>
             
         </tags>
       
@@ -257,13 +269,13 @@
       
         <tags>
             
+            <tag> 哈希表 </tag>
+            
             <tag> 动态规划 </tag>
             
             <tag> Leetcode 每日一题 </tag>
             
             <tag> 暴力 </tag>
-            
-            <tag> 哈希表 </tag>
             
             <tag> 枚举 </tag>
             
@@ -272,6 +284,19 @@
             <tag> 前缀和 </tag>
             
         </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Leetcode 每日一题十二：1728. 猫和老鼠 II</title>
+      <link href="/2025/02/12/leetcode12/"/>
+      <url>/2025/02/12/leetcode12/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
       
     </entry>
     
@@ -338,6 +363,33 @@
     
     
     <entry>
+      <title>Leetcode 每日一题十：63. 不同路径 II</title>
+      <link href="/2025/02/10/leetcode10/"/>
+      <url>/2025/02/10/leetcode10/</url>
+      
+        <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/unique-paths-ii/description/">63. 不同路径 II</a>。</p><p>给定一个 m x n 的整数数组 grid。一个机器人初始位于 左上角（即 grid[0][0]）。机器人尝试移动到 右下角（即 grid[m - 1][n - 1]）。机器人每次只能向下或者向右移动一步。</p><p>网格中的障碍物和空位置分别用 1 和 0 来表示。机器人的移动路径中不能包含 任何 有障碍物的方格。</p><p>返回机器人能够到达右下角的不同路径数量。</p><p>测试用例保证答案小于等于 2 * 10^9。</p><p>提示：</p><ul><li>m == obstacleGrid.length</li><li>n == obstacleGrid[i].length</li><li>1 &lt;= m, n &lt;= 100</li><li>obstacleGrid[i][j] 为 0 或 1</li></ul><h1>分析理解</h1><p>提供一个mxn二维数组grid，其中的元素为1代表有障碍物，为0代表无障碍物。机器人初始位于(0, 0)处，目的地为(m-1, n-1)，需要我们求出从(0, 0)到(m-1, n-1)的路径个数。</p><h1>基本思路</h1><p>使用动态规划求解，求解一个二维的dp数组，dp[i+1][j+1]来代表从(0, 0)到(i, j)的路径个数。这里使用dp[i+1][j+1]而不用dp[i][j]是有原因的，主要是该题目有个特殊的几个用例，(0, 0)处为障碍物，导致解为0。</p><p>初始时将dp中所有元素均设为0，然后将dp[0][1]或者dp[1][0]初始化为1。而在求解dp[i+1][j+1]时dp[i+1][j+1] = dp[i+1][j] + dp[i][j+1]，这样当i=0时求得dp[1][1]=dp[0][1]+dp[1][0]即从(0, 0)到(0, 0)的路径条数。这样做的好处就是不用特殊化处理边界，便于撰写代码。最后返回dp[m][n]即(0, 0)到(m-1, n-1)的路径条数。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; obstacleGrid)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> m = obstacleGrid.<span class="built_in">size</span>(), n = obstacleGrid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">dp</span>(m<span class="number">+1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n<span class="number">+1</span>, <span class="number">0</span>));</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (obstacleGrid[i][j] == <span class="number">0</span>)</span><br><span class="line">                    dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = dp[i][j<span class="number">+1</span>] + dp[i<span class="number">+1</span>][j];</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">return</span> dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">uniquePathsWithObstacles</span><span class="params">(<span class="type">int</span>** obstacleGrid, <span class="type">int</span> obstacleGridSize, <span class="type">int</span>* obstacleGridColSize)</span> &#123;</span><br><span class="line">    <span class="type">int</span> m = obstacleGridSize, n = *obstacleGridColSize;</span><br><span class="line">    <span class="type">int</span>** dp = (<span class="type">int</span>**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span> *) * (m+<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m + <span class="number">1</span>; ++i) &#123;</span><br><span class="line">        dp[i] = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * (n+<span class="number">1</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n + <span class="number">1</span>; ++j)</span><br><span class="line">            dp[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (obstacleGrid[i][j] == <span class="number">0</span>)</span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i+<span class="number">1</span>][j] + dp[i][j+<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[m][n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1>复杂度</h1><p>时间复杂度和空间复杂度均为O(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">n^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>)。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Leetcode 每日一题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 动态规划 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Leetcode 每日一题九：128. 最长连续序列</title>
       <link href="/2025/02/08/leetcode9/"/>
       <url>/2025/02/08/leetcode9/</url>
@@ -354,9 +406,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
             <tag> 数组 </tag>
             
@@ -433,9 +485,9 @@
       
         <tags>
             
-            <tag> Leetcode 每日一题 </tag>
-            
             <tag> 哈希表 </tag>
+            
+            <tag> Leetcode 每日一题 </tag>
             
             <tag> 数组 </tag>
             
