@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-02-23T04:49:54.764Z</updated>
+  <updated>2025-02-25T08:58:33.689Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Leetcode 每日一题：2502. 设计内存分配器</title>
+    <link href="http://malone-ai.github.io/2025/02/25/leetcode26/"/>
+    <id>http://malone-ai.github.io/2025/02/25/leetcode26/</id>
+    <published>2025-02-25T07:23:34.000Z</published>
+    <updated>2025-02-25T08:58:33.689Z</updated>
+    
+    <content type="html"><![CDATA[<p>今日的Leetcode每日一题为<a href="https://leetcode.cn/problems/design-memory-allocator/description/">2502. 设计内存分配器</a>。</p><p>给你一个整数 n ，表示下标从 0 开始的内存数组的大小。所有内存单元开始都是空闲的。</p><p>请你设计一个具备以下功能的内存分配器：</p><p>分配 一块大小为 size 的连续空闲内存单元并赋 id <code>mID</code> 。<br>释放 给定 id <code>mID</code> 对应的所有内存单元。<br>注意：</p><p>多个块可以被分配到同一个 mID 。<br>你必须释放<code>mID</code>对应的所有内存单元，即便这些内存单元被分配在不同的块中。<br>实现<code>Allocator</code>类：</p><p>Allocator(int n) 使用一个大小为 n 的内存数组初始化 Allocator 对象。<br>int allocate(int size, int mID) 找出大小为 size 个连续空闲内存单元且位于最左侧的块，分配并赋 id <code>mID</code> 。返回块的第一个下标。如果不存在这样的块，返回 -1 。<br>int freeMemory(int mID) 释放 id <code>mID</code> 对应的所有内存单元。返回释放的内存单元数目。</p><h1>分析理解</h1><p>题目要求实现一个内存管理单元。</p><p>函数allocate有两个参数：size和mID，size即需要找到size个内存块并且这些内存块得是连续的，mID即这些内存块得被赋值为mID。这个函数的返回值为这些内存块的首地址即下标索引。</p><p>函数freeMemory有一个参数mID，实现的功能为将所有内存单元中值为mID的单元释放，然后返回释放的内存单元的个数。</p><h1>基本思路</h1><p>我的第一想法是通过链表来进行组织这些内存块，然后通过哈希表、二维数组等记录未使用的内存块的数量和大小等。但是一直苦于将内存块按照大小进行排序这件事儿，感觉这么做将事情反而复杂化了，并且使用链表貌似也有点多余了。</p><p>最后看了看<a href="https://leetcode.cn/problems/design-memory-allocator/solutions/2016010/bao-li-mo-ni-by-endlesscheng-bqba/?envType=daily-question&amp;envId=2025-02-25">灵茶山艾府的题解</a>。他提供了两种方法：</p><ul><li>模拟</li><li>线段树</li></ul><p>看了看两种方法，感觉使用他的模拟解法就足够了。</p><p>基本思路是使用数组来组织内存块，在分配内存块时，并且全部初始化为0，表示内存块未使用（题目限定mID的取值范围为[1, 1000]）。然后从头开始遍历，寻找到一块大小为size的连续内存块，找不到则返回-1。回收内存块就更简单了，遍历所有内存块，内存块值为mID的均释放并设为0，并使用count进行计数即可。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Allocator</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> *mem;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Allocator</span>(<span class="type">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;mem = (<span class="type">int</span> *)<span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span> ) * n);</span><br><span class="line">        <span class="keyword">this</span>-&gt;n = n;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) </span><br><span class="line">            <span class="keyword">this</span>-&gt;mem[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">allocate</span><span class="params">(<span class="type">int</span> size, <span class="type">int</span> mID)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mem[i] != <span class="number">0</span>) &#123;</span><br><span class="line">                count = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ++count;</span><br><span class="line">            <span class="keyword">if</span> (count == size) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = i - count + <span class="number">1</span>; j &lt; i + <span class="number">1</span>; ++j) &#123;</span><br><span class="line">                    mem[j] = mID;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> i - count + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">freeMemory</span><span class="params">(<span class="type">int</span> mID)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mem[i] == mID) &#123;</span><br><span class="line">                mem[i] = <span class="number">0</span>;</span><br><span class="line">                ++count;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your Allocator object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * Allocator* obj = new Allocator(n);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj-&gt;allocate(size,mID);</span></span><br><span class="line"><span class="comment"> * int param_2 = obj-&gt;freeMemory(mID);</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> * mem;</span><br><span class="line">    <span class="type">int</span> n;    </span><br><span class="line">&#125; Allocator;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Allocator* <span class="title function_">allocatorCreate</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    Allocator * obj = (Allocator *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Allocator));</span><br><span class="line">    obj-&gt;mem = (<span class="type">int</span> *)<span class="built_in">calloc</span>(n, <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    obj-&gt;n = n;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">allocatorAllocate</span><span class="params">(Allocator* obj, <span class="type">int</span> size, <span class="type">int</span> mID)</span> &#123;</span><br><span class="line">    <span class="type">int</span> *mem = obj-&gt;mem;</span><br><span class="line">    <span class="type">int</span> n = obj-&gt;n;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mem[i] != <span class="number">0</span>) &#123;</span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ++count;</span><br><span class="line">        <span class="keyword">if</span> (count == size) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = i - count + <span class="number">1</span>; j &lt; i + <span class="number">1</span>; ++j)</span><br><span class="line">                mem[j] = mID;</span><br><span class="line">            <span class="keyword">return</span> i - count + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">allocatorFreeMemory</span><span class="params">(Allocator* obj, <span class="type">int</span> mID)</span> &#123;</span><br><span class="line">    <span class="type">int</span> * mem = obj-&gt;mem;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> n = obj-&gt;n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mem[i] == mID) &#123;</span><br><span class="line">            mem[i] = <span class="number">0</span>;</span><br><span class="line">            ++count;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">allocatorFree</span><span class="params">(Allocator* obj)</span> &#123;</span><br><span class="line">    <span class="built_in">free</span>(obj-&gt;mem);</span><br><span class="line">    <span class="built_in">free</span>(obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your Allocator struct will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * Allocator* obj = allocatorCreate(n);</span></span><br><span class="line"><span class="comment"> * int param_1 = allocatorAllocate(obj, size, mID);</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> * int param_2 = allocatorFreeMemory(obj, mID);</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> * allocatorFree(obj);</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure><h1>复杂度分析</h1><p>分配和释放内存函数的时间复杂度均为O(n)，空间复杂度为O(1)。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;今日的Leetcode每日一题为&lt;a href=&quot;https://leetcode.cn/problems/design-memory-allocator/description/&quot;&gt;2502. 设计内存分配器&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;给你一个整数 n ，表示下标从 0 开</summary>
+      
+    
+    
+    
+    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
+    
+    
+    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
+    
+    <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
+    
+    <category term="设计" scheme="http://malone-ai.github.io/tags/%E8%AE%BE%E8%AE%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>Leetcode 每日一题二十二：2209. 用地毯覆盖后的最少白色砖块</title>
@@ -118,9 +147,9 @@
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
     <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
+    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     <category term="二分查找" scheme="http://malone-ai.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
     
@@ -289,11 +318,11 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     
     <category term="动态规划" scheme="http://malone-ai.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
+    <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     <category term="暴力" scheme="http://malone-ai.github.io/tags/%E6%9A%B4%E5%8A%9B/"/>
-    
-    <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
     
     <category term="枚举" scheme="http://malone-ai.github.io/tags/%E6%9E%9A%E4%B8%BE/"/>
     
@@ -339,9 +368,9 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
-    <category term="二分查找" scheme="http://malone-ai.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
-    
     <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
+    
+    <category term="二分查找" scheme="http://malone-ai.github.io/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"/>
     
   </entry>
   
@@ -425,9 +454,9 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
     <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
+    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
     
@@ -503,9 +532,9 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
     <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
+    
+    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
     
@@ -542,35 +571,6 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
     
     <category term="回溯" scheme="http://malone-ai.github.io/tags/%E5%9B%9E%E6%BA%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Leetcode 每日一题五：922. 按奇偶排序数组 II</title>
-    <link href="http://malone-ai.github.io/2025/02/04/leetcode5/"/>
-    <id>http://malone-ai.github.io/2025/02/04/leetcode5/</id>
-    <published>2025-02-04T05:21:11.000Z</published>
-    <updated>2025-02-12T10:02:02.372Z</updated>
-    
-    <content type="html"><![CDATA[<p>今日Leetcode每日一题为<a href="https://leetcode.cn/problems/sort-array-by-parity-ii/description/">922. 按奇偶排序数组 II</a>。</p><p>这道题比较简单，仅仅做一个记录。时间复杂度为O(n), 空间复杂度为O(1)。<br>以下是C++实现：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">sortArrayByParityII</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">res</span><span class="params">(n)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> x: nums) &#123;</span><br><span class="line">            <span class="keyword">if</span> (x % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                res[i] = x;</span><br><span class="line">                i += <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res[j] = x;</span><br><span class="line">                j += <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;今日Leetcode每日一题为&lt;a href=&quot;https://leetcode.cn/problems/sort-array-by-parity-ii/description/&quot;&gt;922. 按奇偶排序数组 II&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;这道题比较简单，仅仅做一个记录。时间</summary>
-      
-    
-    
-    
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
-    
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
-    <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="双指针" scheme="http://malone-ai.github.io/tags/%E5%8F%8C%E6%8C%87%E9%92%88/"/>
     
   </entry>
   
