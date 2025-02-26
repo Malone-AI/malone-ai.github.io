@@ -1,0 +1,479 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Leetcode 每日一题二十四：1206. 设计跳表 | 零一世界</title><meta name="author" content="Malone"><meta name="copyright" content="Malone"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="今日 Leetcode 每日一题为1206. 设计跳表。 不使用任何库函数，设计一个 跳表 。 跳表是在O(log n)时间内完成增加、删除、搜索操作的数据结构。跳表相比于树堆与红黑树，其功能与性能相当，并且跳表的代码长度相较下更短，其设计思想与链表相似。 例如，一个跳表包含 [30, 40, 50, 60, 70, 90] ，然后增加 80、45 到跳表中，以下图的方式操作：  注：图片来源于L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode 每日一题二十四：1206. 设计跳表">
+<meta property="og:url" content="http://malone-ai.github.io/2025/02/23/leetcode24/index.html">
+<meta property="og:site_name" content="零一世界">
+<meta property="og:description" content="今日 Leetcode 每日一题为1206. 设计跳表。 不使用任何库函数，设计一个 跳表 。 跳表是在O(log n)时间内完成增加、删除、搜索操作的数据结构。跳表相比于树堆与红黑树，其功能与性能相当，并且跳表的代码长度相较下更短，其设计思想与链表相似。 例如，一个跳表包含 [30, 40, 50, 60, 70, 90] ，然后增加 80、45 到跳表中，以下图的方式操作：  注：图片来源于L">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://malone-ai.github.io/images/doge.jpg">
+<meta property="article:published_time" content="2025-02-23T02:41:38.000Z">
+<meta property="article:modified_time" content="2025-02-26T12:33:09.843Z">
+<meta property="article:author" content="Malone">
+<meta property="article:tag" content="Leetcode 每日一题">
+<meta property="article:tag" content="设计">
+<meta property="article:tag" content="链表">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://malone-ai.github.io/images/doge.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Leetcode 每日一题二十四：1206. 设计跳表",
+  "url": "http://malone-ai.github.io/2025/02/23/leetcode24/",
+  "image": "http://malone-ai.github.io/images/doge.jpg",
+  "datePublished": "2025-02-23T02:41:38.000Z",
+  "dateModified": "2025-02-26T12:33:09.843Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Malone",
+      "url": "http://malone-ai.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://malone-ai.github.io/2025/02/23/leetcode24/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Leetcode 每日一题二十四：1206. 设计跳表',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="零一世界" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/background.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">零一世界</span></a><a class="nav-page-title" href="/"><span class="site-name">Leetcode 每日一题二十四：1206. 设计跳表</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Leetcode 每日一题二十四：1206. 设计跳表</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-23T02:41:38.000Z" title="发表于 2025-02-23 10:41:38">2025-02-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-26T12:33:09.843Z" title="更新于 2025-02-26 20:33:09">2025-02-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">Leetcode 每日一题</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>今日 Leetcode 每日一题为<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/design-skiplist/description/">1206. 设计跳表</a>。</p>
+<p>不使用任何库函数，设计一个 跳表 。</p>
+<p>跳表是在<code>O(log n)</code>时间内完成增加、删除、搜索操作的数据结构。跳表相比于树堆与红黑树，其功能与性能相当，并且跳表的代码长度相较下更短，其设计思想与链表相似。</p>
+<p>例如，一个跳表包含 [30, 40, 50, 60, 70, 90] ，然后增加 80、45 到跳表中，以下图的方式操作：<br>
+<img src="/images/1702370216-mKQcTt-1506_skiplist.gif" alt=""><br>
+注：图片来源于Leetcode <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/design-skiplist/description/">https://leetcode.cn/problems/design-skiplist/description/</a></p>
+<p>跳表中有很多层，每一层是一个短的链表。在第一层的作用下，增加、删除和搜索操作的时间复杂度不超过 O(n)。跳表的每一个操作的平均时间复杂度是 O(log(n))，空间复杂度是 O(n)。</p>
+<p>了解更多 : <a target="_blank" rel="noopener" href="https://oi-wiki.org/ds/skiplist/">https://oi-wiki.org/ds/skiplist/</a></p>
+<p>在本题中，你的设计应该要包含这些函数：</p>
+<ul>
+<li>bool search(int target) : 返回target是否存在于跳表中。</li>
+<li>void add(int num): 插入一个元素到跳表。</li>
+<li>bool erase(int num): 在跳表中删除一个值，如果 num 不存在，直接返回false. 如果存在多个 num ，删除其中任意一个即可。</li>
+</ul>
+<p>注意，跳表中可能存在多个相同的值，你的代码需要处理这种情况。</p>
+<h1>分析理解</h1>
+<p>这道题目让我们设计一个数据结构——跳表。在这之前确实不怎么了解跳表，仔细看了一会儿发现跳表和链表有点像，但是跳表应该说是一个多层链表。其中第0层是包含所有元素的有序链表；1层及以上，每一层都是下一层的子集，作为索引层，帮助快速跳过多个元素。每一层的元素通过指针连接，高层元素会指向低层的相同元素，形成一个“跳跃”的结构。</p>
+<p>跳表有三个核心操作：</p>
+<ol>
+<li>查找</li>
+<li>插入</li>
+<li>删除</li>
+</ol>
+<p>跳表的应用还挺广泛的，Redis的有序集合（Sorted Set）底层就使用了跳表。</p>
+<p>跳表可以实现操作复杂度为O(log n)的查找、插入和删除，还是挺高效的。谈一谈个人对这的理解吧。不管跳表还是链表，都离不开查找、插入和删除三个核心操作，而私以为插入和删除都是基于查找操作的，只要查找得快，插入和删除得也就快。</p>
+<p>链表查找的时候，最坏的情况下是O(n)，就是遍历了整个表。而跳表作为多层链表，可以跳过遍历某些元素，从而加快查找速度，举个简单的例子。</p>
+<p>假设我们要在跳表中查找值 7，跳表的结构如下：</p>
+<ul>
+<li>第2层（最高层）：1 -&gt; 9</li>
+<li>第1层：1 -&gt; 5 -&gt; 9</li>
+<li>第0层（底层）：1 -&gt; 3 -&gt; 5 -&gt; 7 -&gt; 9</li>
+</ul>
+<p>查找过程：</p>
+<ol>
+<li>从最高层（第2层）开始：
+<ul>
+<li>当前节点是 1，下一个节点是 9。</li>
+<li>9 大于 7，所以不能直接跳到 9，而是向下移动到第1层。</li>
+</ul>
+</li>
+<li>在第1层：
+<ul>
+<li>当前节点是 1，下一个节点是 5。</li>
+<li>5 小于 7，所以跳到 5。</li>
+<li>从 5 开始，下一个节点是 9。</li>
+<li>9 大于 7，所以向下移动到第0层。</li>
+</ul>
+</li>
+<li>在第0层：
+<ul>
+<li>当前节点是 5，下一个节点是 7。</li>
+<li>7 等于目标值，查找成功。</li>
+</ul>
+</li>
+</ol>
+<p>基于上述过程可以大概了解跳表的查询过程，可以看到跳表在查询7的时候跳过了对3的遍历。这个例子或许并不能很好地体现跳表的高效，但是在规模较大时，会跳过对很多元素的遍历，产生较好的效果。</p>
+<p>此外，还有一点。跳表依赖于随机算法。在最坏的情况下会退化成单层有序链表。因此随机算法的选择很重要。</p>
+<h1>基本思路</h1>
+<p>这道题我是一点思路都没有，研究了许久官方题解中的C语言实现。一直感觉C语言是不错的语言，虽然有诸多的不便，没有面向对象，没有类似于C++的模板。但是也不可否认C语言的精妙。所以，基本思路：抄！doge</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> MAX_LEVEL = <span class="number">32</span>;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">double</span> P_FACTOR = <span class="number">0.25</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SkiplistNode</span> &#123;</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    vector&lt;SkiplistNode *&gt; forward;</span><br><span class="line">    <span class="built_in">SkiplistNode</span>(<span class="type">int</span> _val, <span class="type">int</span> _maxLevel = MAX_LEVEL) : <span class="built_in">val</span>(_val), forward(_maxLevel, <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Skiplist</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    SkiplistNode * head;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">    mt19937 gen&#123;random_device&#123;&#125;()&#125;;</span><br><span class="line">    uniform_real_distribution&lt;<span class="type">double</span>&gt; dis;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Skiplist</span>(): <span class="built_in">head</span>(<span class="keyword">new</span> <span class="built_in">SkiplistNode</span>(<span class="number">-1</span>)), <span class="built_in">level</span>(<span class="number">0</span>), <span class="built_in">dis</span>(<span class="number">0</span>, <span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">search</span><span class="params">(<span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        SkiplistNode *curr = <span class="keyword">this</span>-&gt;head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="comment">/* 找到第 i 层小于且最接近 target 的元素*/</span></span><br><span class="line">            <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; target) &#123;</span><br><span class="line">                curr = curr-&gt;forward[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">/* 检测当前元素的值是否等于 target */</span></span><br><span class="line">        <span class="keyword">if</span> (curr &amp;&amp; curr-&gt;val == target) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;SkiplistNode *&gt; <span class="title">update</span><span class="params">(MAX_LEVEL, head)</span></span>;</span><br><span class="line">        SkiplistNode *curr = <span class="keyword">this</span>-&gt;head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="comment">/* 找到第 i 层小于且最接近 num 的元素*/</span></span><br><span class="line">            <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">                curr = curr-&gt;forward[i];</span><br><span class="line">            &#125;</span><br><span class="line">            update[i] = curr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> lv = <span class="built_in">randomLevel</span>();</span><br><span class="line">        level = <span class="built_in">max</span>(level, lv);</span><br><span class="line">        SkiplistNode *newNode = <span class="keyword">new</span> <span class="built_in">SkiplistNode</span>(num, lv);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; lv; i++) &#123;</span><br><span class="line">            <span class="comment">/* 对第 i 层的状态进行更新，将当前元素的 forward 指向新的节点 */</span></span><br><span class="line">            newNode-&gt;forward[i] = update[i]-&gt;forward[i];</span><br><span class="line">            update[i]-&gt;forward[i] = newNode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">erase</span><span class="params">(<span class="type">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;SkiplistNode *&gt; <span class="title">update</span><span class="params">(MAX_LEVEL, <span class="literal">nullptr</span>)</span></span>;</span><br><span class="line">        SkiplistNode *curr = <span class="keyword">this</span>-&gt;head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="comment">/* 找到第 i 层小于且最接近 num 的元素*/</span></span><br><span class="line">            <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">                curr = curr-&gt;forward[i];</span><br><span class="line">            &#125;</span><br><span class="line">            update[i] = curr;</span><br><span class="line">        &#125;</span><br><span class="line">        curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">/* 如果值不存在则返回 false */</span></span><br><span class="line">        <span class="keyword">if</span> (!curr || curr-&gt;val != num) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; level; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (update[i]-&gt;forward[i] != curr) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/* 对第 i 层的状态进行更新，将 forward 指向被删除节点的下一跳 */</span></span><br><span class="line">            update[i]-&gt;forward[i] = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">delete</span> curr;</span><br><span class="line">        <span class="comment">/* 更新当前的 level */</span></span><br><span class="line">        <span class="keyword">while</span> (level &gt; <span class="number">1</span> &amp;&amp; head-&gt;forward[level - <span class="number">1</span>] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            level--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">randomLevel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> lv = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">/* 随机生成 lv */</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">dis</span>(gen) &lt; P_FACTOR &amp;&amp; lv &lt; MAX_LEVEL) &#123;</span><br><span class="line">            lv++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lv;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">作者：力扣官方题解</span><br><span class="line">链接：https:<span class="comment">//leetcode.cn/problems/design-skiplist/solutions/1696545/she-ji-tiao-biao-by-leetcode-solution-e8yh/</span></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> MAX_LEVEL = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> P_FACTOR = RAND_MAX &gt;&gt; <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">SkiplistNode</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">int</span> maxLevel;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">SkiplistNode</span> **<span class="title">forward</span>;</span></span><br><span class="line">&#125; SkiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    SkiplistNode *head;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">&#125; Skiplist;</span><br><span class="line"></span><br><span class="line">SkiplistNode *<span class="title function_">skiplistNodeCreat</span><span class="params">(<span class="type">int</span> val, <span class="type">int</span> maxLevel)</span> &#123;</span><br><span class="line">    SkiplistNode *obj = (SkiplistNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SkiplistNode));</span><br><span class="line">    obj-&gt;val = val;</span><br><span class="line">    obj-&gt;maxLevel = maxLevel;</span><br><span class="line">    obj-&gt;forward = (SkiplistNode **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SkiplistNode *) * maxLevel);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; maxLevel; i++) &#123;</span><br><span class="line">        obj-&gt;forward[i] = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">skiplistNodeFree</span><span class="params">(SkiplistNode* obj)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (obj-&gt;forward) &#123;</span><br><span class="line">        <span class="built_in">free</span>(obj-&gt;forward);</span><br><span class="line">        obj-&gt;forward = <span class="literal">NULL</span>;</span><br><span class="line">        obj-&gt;maxLevel = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Skiplist* <span class="title function_">skiplistCreate</span><span class="params">()</span> &#123;</span><br><span class="line">    Skiplist *obj = (Skiplist *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Skiplist));</span><br><span class="line">    obj-&gt;head = skiplistNodeCreat(<span class="number">-1</span>, MAX_LEVEL);</span><br><span class="line">    obj-&gt;level = <span class="number">0</span>;</span><br><span class="line">    srand(time(<span class="literal">NULL</span>));</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">skiplistFree</span><span class="params">(Skiplist* obj)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (SkiplistNode * curr = obj-&gt;head; curr; ) &#123;</span><br><span class="line">        SkiplistNode *prev = curr;</span><br><span class="line">        curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">        skiplistNodeFree(prev);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">randomLevel</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> lv = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">/* 随机生成 lv */</span></span><br><span class="line">    <span class="keyword">while</span> (rand() &lt; P_FACTOR &amp;&amp; lv &lt; MAX_LEVEL) &#123;</span><br><span class="line">        lv++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lv;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">skiplistSearch</span><span class="params">(Skiplist* obj, <span class="type">int</span> target)</span> &#123;</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="comment">/* 找到第 i 层小于且最接近 target 的元素*/</span></span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; target) &#123;</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">    <span class="comment">/* 检测当前元素的值是否等于 target */</span></span><br><span class="line">    <span class="keyword">if</span> (curr &amp;&amp; curr-&gt;val == target) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">skiplistAdd</span><span class="params">(Skiplist* obj, <span class="type">int</span> num)</span> &#123;</span><br><span class="line">    SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="comment">/* 找到第 i 层小于且最接近 num 的元素*/</span></span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">        update[i] = curr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> lv = randomLevel();</span><br><span class="line">    <span class="keyword">if</span> (lv &gt; obj-&gt;level) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level; i &lt; lv; i++) &#123;</span><br><span class="line">            update[i] = obj-&gt;head;</span><br><span class="line">        &#125;</span><br><span class="line">        obj-&gt;level = lv;</span><br><span class="line">    &#125;</span><br><span class="line">    SkiplistNode *newNode = skiplistNodeCreat(num, lv);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; lv; i++) &#123;</span><br><span class="line">        <span class="comment">/* 对第 i 层的状态进行更新，将当前元素的 forward 指向新的节点 */</span></span><br><span class="line">        newNode-&gt;forward[i] = update[i]-&gt;forward[i];</span><br><span class="line">        update[i]-&gt;forward[i] = newNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">skiplistErase</span><span class="params">(Skiplist* obj, <span class="type">int</span> num)</span> &#123;</span><br><span class="line">    SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="comment">/* 找到第 i 层小于且最接近 num 的元素*/</span></span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">        update[i] = curr;</span><br><span class="line">    &#125;</span><br><span class="line">    curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">    <span class="comment">/* 如果值不存在则返回 false */</span></span><br><span class="line">    <span class="keyword">if</span> (!curr || curr-&gt;val != num) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; obj-&gt;level; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (update[i]-&gt;forward[i] != curr) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">/* 对第 i 层的状态进行更新，将 forward 指向被删除节点的下一跳 */</span></span><br><span class="line">        update[i]-&gt;forward[i] = curr-&gt;forward[i];</span><br><span class="line">    &#125;</span><br><span class="line">    skiplistNodeFree(curr);</span><br><span class="line">    <span class="comment">/* 更新当前的 level */</span></span><br><span class="line">    <span class="keyword">while</span> (obj-&gt;level &gt; <span class="number">1</span> &amp;&amp; obj-&gt;head-&gt;forward[obj-&gt;level - <span class="number">1</span>] == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        obj-&gt;level--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">作者：力扣官方题解</span><br><span class="line">链接：https:<span class="comment">//leetcode.cn/problems/design-skiplist/solutions/1696545/she-ji-tiao-biao-by-leetcode-solution-e8yh/</span></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p>我主要围绕着C语言的实现进行一下理解，便于日后复习。理解了C语言版本，C++版本也就不难了。</p>
+<h2 id="代码理解">代码理解</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> MAX_LEVEL = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> P_FACTOR = RAND_MAX &gt;&gt; <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>首先定义了两个常量MAX_LEVEL和P_FACTOR。MAX_LEVEL是跳表的最大层数，而P_FACTOR是一个概率，这里称它为概率或许有点牵强，结合着函数randomLevel应该就不难理解了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">randomLevel</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> lv = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">/* 随机生成 lv */</span></span><br><span class="line">    <span class="keyword">while</span> (rand() &lt; P_FACTOR &amp;&amp; lv &lt; MAX_LEVEL) </span><br><span class="line">        lv++;</span><br><span class="line">    <span class="keyword">return</span> lv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数randomLevel是一个静态的内联函数，由关键字<code>static</code>和<code>inline</code>标识。</p>
+<h3 id="static关键字"><code>static</code>关键字</h3>
+<p><code>static</code>将函数的作用域限制在当前文件内，其他文件无法访问这个函数。这里使用static关键字标识这个函数有以下好处：</p>
+<ol>
+<li>避免命名冲突
+<ul>
+<li>如果其他文件中也定义了同名的 randomLevel 函数，链接时会发生冲突。</li>
+<li>使用 static 可以确保这个函数只在当前文件中可见，避免冲突。</li>
+</ul>
+</li>
+<li>封装性
+<ul>
+<li>randomLevel 是跳表内部使用的辅助函数，不需要暴露给外部。</li>
+</ul>
+</li>
+</ol>
+<h3 id="inline关键字"><code>inline</code>关键字</h3>
+<p><code>inline</code>关键字将函数标识为<code>内联函数</code>，提示编译器将函数内联展开，即将函数的代码直接插入到调用处，而不是通过函数调用的方式执行。使用<code>inline</code>关键字有以下好处：</p>
+<ol>
+<li>减少函数调用开销
+<ul>
+<li>函数调用需要保存上下文、跳转到函数地址、执行完后再返回，这些操作有一定的开销。</li>
+<li>randomLevel 是一个简单的函数，内联展开可以避免这些开销，提高性能。</li>
+</ul>
+</li>
+<li>适合小型函数
+<ul>
+<li>randomLevel 的逻辑非常简单（只是一个循环），适合内联展开。</li>
+<li>如果函数体较大，内联可能会导致代码膨胀，反而降低性能。所以说不是所有的函数都适合作内联声明。</li>
+</ul>
+</li>
+<li>编译器优化
+<ul>
+<li>inline 是对编译器的建议，编译器可以选择是否真正内联展开。</li>
+</ul>
+</li>
+</ol>
+<h3 id="randomLevel-函数">randomLevel 函数</h3>
+<p>randomLevel函数的作用是生成一个随机数，随机数的区间为[1, MAX_LEVEL]即[1, 32]。lv从1开始，每次以25%的概率递增。为什么是25%呢？这就得看开头的静态常量P_FACTOR，P_FACTOR = RAND_MAX &gt;&gt; 2。RAND_MAX为rand函数能生成的随机数的最大值，然后右移两位，也就是除以4。rand能生成的随机数区间为[1, RAND_MAX]，当生成的随机数小于P_FACTOR即RAND_MAX / 4时进行递增。生成的随机数小于P_FACTOR的区间占<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>4</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.845108em;"></span><span class="strut bottom" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">4</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span>，大于P_FACTOR的区间占<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mn>3</mn></mrow><mrow><mn>4</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{3}{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.845108em;"></span><span class="strut bottom" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">4</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">3</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span>，这也不难理解为什么是25%概率。还有就是随机数的生成需要初始化随机数种子，这一步在跳表的创建中通过<code>srand(time(NULL))</code>实现了。</p>
+<h3 id="跳表有关结构体">跳表有关结构体</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">SkiplistNode</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">int</span> maxLevel;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">SkiplistNode</span> **<span class="title">forward</span>;</span></span><br><span class="line">&#125; SkiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    SkiplistNode *head;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">&#125; Skiplist;</span><br></pre></td></tr></table></figure>
+<p>类似于链表，其中SkiplistNode是跳表中<code>节点的定义</code>，Skiplist是<code>跳表的定义</code>。</p>
+<p><code>SkiplistNode</code>结构体内val代表节点存储的值，maxLevel为该节点的最大层数。需要注意的是如果某个节点的maxLevel值为4，那么说明该节点存在于第0、1、2、3层。结构体内的forward是一个指针数组，而forward[i]指向该节点在第i层的下一个节点。</p>
+<p><code>Skiplist</code>结构体，个人感觉不用它也可以，但是使用后方便管理，主要是方便参数的地址传递。这样每次只需要将Skiplist类型的指针传递给函数即可，否则既要传指向*head的指针，又要传指向level的指针，实属不方便。还需要注意的一点是level的值，它其实是跳表中所有节点中maxLevel值最大的那一个。</p>
+<h3 id="跳表节点的创建">跳表节点的创建</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SkiplistNode *<span class="title function_">skiplistNodeCreat</span><span class="params">(<span class="type">int</span> val, <span class="type">int</span> maxLevel)</span> &#123;</span><br><span class="line">    SkiplistNode *obj = (SkiplistNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SkiplistNode));</span><br><span class="line">    obj-&gt;val = val;</span><br><span class="line">    obj-&gt;maxLevel = maxLevel;</span><br><span class="line">    obj-&gt;forward = (SkiplistNode **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SkiplistNode *) * maxLevel);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; maxLevel; i++) </span><br><span class="line">        obj-&gt;forward[i] = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数很好理解，就是为跳表节点分配内存，初始化跳表节点中的val、maxLevel，为跳表节点的指针数组forward分配内存，并将所有的成员指向NULL。</p>
+<h3 id="跳表节点的释放">跳表节点的释放</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">skiplistNodeFree</span><span class="params">(SkiplistNode* obj)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (obj-&gt;forward) &#123;</span><br><span class="line">        <span class="built_in">free</span>(obj-&gt;forward);</span><br><span class="line">        obj-&gt;forward = <span class="literal">NULL</span>;</span><br><span class="line">        obj-&gt;maxLevel = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理解了跳表节点的创建，那么释放也不难理解，相当于将创建节点时所做的事儿反过来做一遍。释放forward（在释放前先检查其是否为NULL，避免反复释放），释放跳表节点所占用内存。</p>
+<h3 id="跳表的创建与释放">跳表的创建与释放</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Skiplist* <span class="title function_">skiplistCreate</span><span class="params">()</span> &#123;</span><br><span class="line">    Skiplist *obj = (Skiplist *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Skiplist));</span><br><span class="line">    obj-&gt;head = skiplistNodeCreat(<span class="number">-1</span>, MAX_LEVEL);</span><br><span class="line">    obj-&gt;level = <span class="number">0</span>;</span><br><span class="line">    srand(time(<span class="literal">NULL</span>));</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">skiplistFree</span><span class="params">(Skiplist* obj)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (SkiplistNode * curr = obj-&gt;head; curr; ) &#123;</span><br><span class="line">        SkiplistNode *prev = curr;</span><br><span class="line">        curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">        skiplistNodeFree(prev);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一块也类似于跳表节点的创建与释放，不再赘述。</p>
+<h3 id="跳表的搜索">跳表的搜索</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">skiplistSearch</span><span class="params">(Skiplist* obj, <span class="type">int</span> target)</span> &#123;</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; target)</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">    curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">    <span class="comment">/* 检测当前元素的值是否等于 target */</span></span><br><span class="line">    <span class="keyword">if</span> (curr &amp;&amp; curr-&gt;val == target) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回target是否存在于跳表中，存在返回true，否则返回false。</p>
+<p>我开始看到这段代码是大写的懵逼，调试了一会儿才明白是怎么个事儿。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">    <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; target)</span><br><span class="line">        curr = curr-&gt;forward[i];</span><br></pre></td></tr></table></figure>
+<p>理解了这段循环体应该就差不多了。还要强调的一点是跳表的头节点存在于每一层。</p>
+<p>从跳表的最高层开始遍历，在每层定位到最后一个小于target的节点，就向下移动一层。当遍历到最后一层时，就找到了最底层最后一个小于target的节点，它的下一个节点很有可能就是目标节点。使用<code>cur = cur-&gt;forward[0]</code>让cur指向该节点，检查其是否为NULL，不为NULL就再检查节点的值是否为target即可。</p>
+<p>查找过程是从最高层开始，逐层向下查找目标值。</p>
+<ol>
+<li>初始化</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SkiplistNode *curr = obj-&gt;head;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>curr 指向跳表的头节点。</li>
+</ul>
+<ol start="2">
+<li>从最高层开始查找</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>obj-&gt;level 是跳表当前的最大层数。</li>
+<li>从最高层（obj-&gt;level - 1）开始，逐层向下查找。</li>
+</ul>
+<ol start="3">
+<li>在当前层向右查找</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; target) </span><br><span class="line">    curr = curr-&gt;forward[i];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>curr-&gt;forward[i] 是当前节点在第 i 层的下一个节点。</li>
+<li>如果下一个节点的值小于 target，则继续向右移动。</li>
+<li>这个过程会跳过多个节点，快速接近目标值。</li>
+</ul>
+<ol start="4">
+<li>移动到下一层</li>
+</ol>
+<ul>
+<li>当在当前层无法继续向右移动时，向下移动到下一层<code>（i--）</code>，继续查找。</li>
+</ul>
+<ol start="5">
+<li>最终定位到目标节点</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curr = curr-&gt;forward[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查找结束后，curr 指向第0层中最后一个小于 target 的节点。</li>
+<li>curr-&gt;forward[0] 是第0层中下一个节点，可能是目标节点。</li>
+</ul>
+<ol start="6">
+<li>检查是否找到目标值</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (curr &amp;&amp; curr-&gt;val == target) </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 curr-&gt;forward[0] 存在且值等于 target，则返回 true。</li>
+<li>否则返回 false。</li>
+</ul>
+<h3 id="跳表中节点的添加">跳表中节点的添加</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">skiplistAdd</span><span class="params">(Skiplist* obj, <span class="type">int</span> num)</span> &#123;</span><br><span class="line">    SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="comment">/* 找到第 i 层小于且最接近 num 的元素*/</span></span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">        update[i] = curr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> lv = randomLevel();</span><br><span class="line">    <span class="keyword">if</span> (lv &gt; obj-&gt;level) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level; i &lt; lv; i++) &#123;</span><br><span class="line">            update[i] = obj-&gt;head;</span><br><span class="line">        &#125;</span><br><span class="line">        obj-&gt;level = lv;</span><br><span class="line">    &#125;</span><br><span class="line">    SkiplistNode *newNode = skiplistNodeCreat(num, lv);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; lv; i++) &#123;</span><br><span class="line">        <span class="comment">/* 对第 i 层的状态进行更新，将当前元素的 forward 指向新的节点 */</span></span><br><span class="line">        newNode-&gt;forward[i] = update[i]-&gt;forward[i];</span><br><span class="line">        update[i]-&gt;forward[i] = newNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>skiplistAdd 的作用是向跳表中插入一个值为 num 的节点。插入时需要：</p>
+<ol>
+<li>找到每一层中最后一个小于 num 的节点。</li>
+<li>随机生成新节点的层数。</li>
+<li>将新节点插入到每一层的正确位置。</li>
+</ol>
+<h4 id="插入过程">插入过程</h4>
+<ol>
+<li>初始化</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">SkiplistNode *cur = obj-&gt;head;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>update是一个指针数组，用于记录每一层中最后一个小于num的节点。</li>
+<li>cur是当前节点，初始化为跳表的头节点。</li>
+</ul>
+<ol start="2">
+<li>查找插入位置</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">    <span class="keyword">while</span> (cur-&gt;forward[i] &amp;&amp; cur-&gt;forward[i]-&gt;val &lt; num) </span><br><span class="line">        cur = cur-&gt;forward[i];</span><br><span class="line">    update[i] = cur;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从最高处(<code>obj-&gt;level-1</code>)开始，逐层向下查找。</li>
+<li>在每一层中，向右移动cur，直到找到最后一个小于num的节点。</li>
+<li>将cur记录到update[i]，表示在第i层，应将新节点插入update[i]的后面。</li>
+</ul>
+<ol start="3">
+<li>随机生成新节点的层数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> lv = randomLevel();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 randomLevel 函数，随机生成新节点的层数 lv。</li>
+</ul>
+<ol start="4">
+<li>更新跳表的层数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (lv &gt; obj-&gt;level) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level; i &lt; lv; ++i) </span><br><span class="line">        update[i] = obj-&gt;head;</span><br><span class="line">    obj-&gt;level = lv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果新节点的层数lv大于跳表的层数obj-&gt;level，需要更新跳表的层数</li>
+<li>对于新增的层（obj-&gt;level-1到lv-1），将update[i]初始化为头节点obj-&gt;head。</li>
+<li>更新跳表的层数obj-&gt;level为lv。</li>
+</ul>
+<ol start="5">
+<li>创建新节点</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SkiplistNode * newNode = skiplistNodeCreate(num, lv);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 skiplistNodeCreate 函数，创建一个值为 num、层数为 lv 的新节点。</li>
+</ul>
+<ol start="6">
+<li>插入新节点</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; lv; ++i) &#123;</span><br><span class="line">    newNode-&gt;forward[i] = update[i]-&gt;forward[i];</span><br><span class="line">    update[i]-&gt;forward[i] = newNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>遍历新节点的每一层（从第0层到第 lv - 1 层）：
+<ul>
+<li>将新节点的 forward[i] 指向 update[i]-&gt;forward[i]。</li>
+<li>将 update[i]-&gt;forward[i] 指向新节点。</li>
+</ul>
+</li>
+</ul>
+<p>这样，新节点就被插入到每一层的正确位置。</p>
+<h3 id="跳表节点的删除">跳表节点的删除</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">skiplistErase</span><span class="params">(Skiplist* obj, <span class="type">int</span> num)</span> &#123;</span><br><span class="line">    SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">    SkiplistNode *curr = obj-&gt;head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) &#123;</span><br><span class="line">            curr = curr-&gt;forward[i];</span><br><span class="line">        &#125;</span><br><span class="line">        update[i] = curr;</span><br><span class="line">    &#125;</span><br><span class="line">    curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span> (!curr || curr-&gt;val != num) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; obj-&gt;level; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (update[i]-&gt;forward[i] != curr) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; </span><br><span class="line">        update[i]-&gt;forward[i] = curr-&gt;forward[i];</span><br><span class="line">    &#125;</span><br><span class="line">    skiplistNodeFree(curr);</span><br><span class="line">    <span class="keyword">while</span> (obj-&gt;level &gt; <span class="number">1</span> &amp;&amp; obj-&gt;head-&gt;forward[obj-&gt;level - <span class="number">1</span>] == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        obj-&gt;level--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>skiplistErase 的作用是从跳表中删除值为 num 的节点。如果节点存在并成功删除，返回 true；否则返回 false。</p>
+<h4 id="删除过程">删除过程</h4>
+<ol>
+<li>初始化</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SkiplistNode *update[MAX_LEVEL];</span><br><span class="line">SkiplistNode *curr = obj-&gt;head;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>update 数组用于记录每一层中需要更新的节点。</li>
+<li>curr 指向跳表的头节点（head），用于遍历跳表</li>
+</ul>
+<ol start="2">
+<li>查找待删除节点的位置</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = obj-&gt;level - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">while</span> (curr-&gt;forward[i] &amp;&amp; curr-&gt;forward[i]-&gt;val &lt; num) </span><br><span class="line">        curr = curr-&gt;forward[i];</span><br><span class="line">    update[i] = curr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从最高层开始，逐层向下查找值为 num 的节点。</li>
+<li>在每一层中，找到最后一个小于 num 的节点，并记录到 update[i] 中。</li>
+<li>这个过程和 skiplistSearch 类似，目的是定位待删除节点的位置。</li>
+</ul>
+<ol start="3">
+<li>定位待删除节点</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curr = curr-&gt;forward[<span class="number">0</span>];</span><br><span class="line">curr 现在指向第<span class="number">0</span>层中最后一个小于 num 的节点。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>curr-&gt;forward[0] 是第0层中下一个节点，可能是待删除节点</li>
+</ul>
+<ol start="4">
+<li>检查节点是否存在</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!curr || curr-&gt;val != num) </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 curr-&gt;forward[0] 不存在，或者它的值不等于 num，说明节点不存在，返回 false。</li>
+</ul>
+<ol start="5">
+<li>更新每一层的指针</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; obj-&gt;level; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (update[i]-&gt;forward[i] != curr) </span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    update[i]-&gt;forward[i] = curr-&gt;forward[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>遍历每一层，更新指向待删除节点的指针。</li>
+<li>如果 update[i]-&gt;forward[i] 不等于 curr，说明在这一层中不需要更新（因为待删除节点不在这一层），并且是从底层向高层遍历的，所以后面的所有层也不需要更新，break退出。</li>
+<li>否则，将 update[i]-&gt;forward[i] 指向 curr-&gt;forward[i]，跳过待删除节点。</li>
+</ul>
+<ol start="6">
+<li>释放待删除节点</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">skiplistNodeFree(curr);</span><br></pre></td></tr></table></figure>
+<p>调用 skiplistNodeFree 函数释放待删除节点的内存。</p>
+<ol start="7">
+<li>更新跳表的层数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (obj-&gt;level &gt; <span class="number">1</span> &amp;&amp; obj-&gt;head-&gt;forward[obj-&gt;level - <span class="number">1</span>] == <span class="literal">NULL</span>) </span><br><span class="line">    obj-&gt;level--;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果删除节点后，某些层变为空（即头节点在这一层的下一个节点为 NULL），则降低跳表的层数。</li>
+<li>这是为了确保跳表的层数不会过高，避免浪费空间。</li>
+</ul>
+<ol start="8">
+<li>返回结果</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除成功，返回 true。</li>
+</ul>
+<p>到此整个代码可算是理解完毕了QvQ。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io">Malone</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io/2025/02/23/leetcode24/">http://malone-ai.github.io/2025/02/23/leetcode24/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://malone-ai.github.io" target="_blank">零一世界</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">Leetcode 每日一题</a><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1/">设计</a><a class="post-meta__tags" href="/tags/%E9%93%BE%E8%A1%A8/">链表</a></div><div class="post-share"><div class="social-share" data-image="/images/doge.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/25/leetcode26/" title="Leetcode 每日一题二十六：2502. 设计内存分配器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-25</div><div class="info-item-2">Leetcode 每日一题二十六：2502. 设计内存分配器</div></div><div class="info-2"><div class="info-item-1">今日的Leetcode每日一题为2502. 设计内存分配器。 给你一个整数 n ，表示下标从 0 开始的内存数组的大小。所有内存单元开始都是空闲的。 请你设计一个具备以下功能的内存分配器： 分配 一块大小为 size 的连续空闲内存单元并赋 id mID 。 释放 给定 id mID 对应的所有内存单元。 注意： 多个块可以被分配到同一个 mID 。 你必须释放mID对应的所有内存单元，即便这些内存单元被分配在不同的块中。 实现Allocator类： Allocator(int n) 使用一个大小为 n 的内存数组初始化 Allocator 对象。 int allocate(int size, int mID) 找出大小为 size 个连续空闲内存单元且位于最左侧的块，分配并赋 id mID 。返回块的第一个下标。如果不存在这样的块，返回 -1 。 int freeMemory(int mID) 释放 id mID...</div></div></div></a><a class="pagination-related" href="/2025/01/31/leetcode1/" title="Leetcode 每日一题一：541. 反转字符串 II"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-31</div><div class="info-item-2">Leetcode 每日一题一：541. 反转字符串 II</div></div><div class="info-2"><div class="info-item-1">从12月份开始到现在陆陆续续参加了几次Leetcode的周赛，从几天也开始决定参加Leetcode的每日一题。思来想去，感觉也进行记录一下比较好。虽然大半年前也在搞这个东西，但是当时不会用hexo，当时只是使用markdown在本地进行记录，日常查看不如hexo方便。现在决定将Leetcode的每一题、周赛以及双周赛等等，总之就是对自己的学习做一个记录，方便朝花夕拾。 今日的Leetcode每日一题为541. 反转字符串 II。这里也使用官方题解作为参考： 123456789101112131415class Solution &#123;public:    string reverseStr(string s, int k) &#123;        int n = s.length();        for (int i = 0; i &lt; n; i += 2 * k) &#123;            reverse(s.begin() + i, s.begin() + min(i + k, n));        &#125;        return...</div></div></div></a><a class="pagination-related" href="/2025/02/10/leetcode10/" title="Leetcode 每日一题十：63. 不同路径 II"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-10</div><div class="info-item-2">Leetcode 每日一题十：63. 不同路径 II</div></div><div class="info-2"><div class="info-item-1">今日Leetcode每日一题为63. 不同路径 II。 给定一个 m x n 的整数数组 grid。一个机器人初始位于 左上角（即 grid[0][0]）。机器人尝试移动到 右下角（即 grid[m - 1][n - 1]）。机器人每次只能向下或者向右移动一步。 网格中的障碍物和空位置分别用 1 和 0 来表示。机器人的移动路径中不能包含 任何 有障碍物的方格。 返回机器人能够到达右下角的不同路径数量。 测试用例保证答案小于等于 2 * 10^9。 提示：  m == obstacleGrid.length n == obstacleGrid[i].length 1 &lt;= m, n &lt;= 100 obstacleGrid[i][j] 为 0 或 1  分析理解 提供一个mxn二维数组grid，其中的元素为1代表有障碍物，为0代表无障碍物。机器人初始位于(0, 0)处，目的地为(m-1, n-1)，需要我们求出从(0, 0)到(m-1, n-1)的路径个数。 基本思路 使用动态规划求解，求解一个二维的dp数组，dp[i+1][j+1]来代表从(0, 0)到(i,...</div></div></div></a><a class="pagination-related" href="/2025/02/11/leetcode11/" title="Leetcode 每日一题十一：913. 猫和老鼠"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-11</div><div class="info-item-2">Leetcode 每日一题十一：913. 猫和老鼠</div></div><div class="info-2"><div class="info-item-1">今日的Leetcode 每日一题为913. 猫和老鼠。 两位玩家分别扮演猫和老鼠，在一张 无向 图上进行游戏，两人轮流行动。 图的形式是：graph[a] 是一个列表，由满足 ab 是图中的一条边的所有节点 b 组成。 老鼠从节点 1 开始，第一个出发；猫从节点 2 开始，第二个出发。在节点 0 处有一个洞。 在每个玩家的行动中，他们 必须 沿着图中与所在当前位置连通的一条边移动。例如，如果老鼠在节点 1 ，那么它必须移动到 graph[1] 中的任一节点。 此外，猫无法移动到洞中（节点 0）。 然后，游戏在出现以下三种情形之一时结束：  如果猫和老鼠出现在同一个节点，猫获胜。 如果老鼠到达洞中，老鼠获胜。 如果某一位置重复出现（即，玩家的位置和移动顺序都与上一次行动相同），游戏平局。  给你一张图 graph ，并假设两位玩家都都以最佳状态参与游戏：  如果老鼠获胜，则返回 1； 如果猫获胜，则返回 2； 如果平局，则返回 0 。  分析理解 这道题是真滴难，看了好久好久才弄明白那么一点，leetcode官方给的标签也是困难。 </div></div></div></a><a class="pagination-related" href="/2025/02/12/leetcode13/" title="Leetcode 每日一题十三：1760. 袋子里最少数目的球"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-12</div><div class="info-item-2">Leetcode 每日一题十三：1760. 袋子里最少数目的球</div></div><div class="info-2"><div class="info-item-1">这里想谈谈之前写Leetcode 每日一题文章的顺序，我基本上是先把代码放上去，然后将代码进行详细讲解。感觉这种方法不合适，因为是先有思路然后有代码。先代码后思路显然是本末倒置了，这一点要改改。 今日的Leetcode每日一题为1760. 袋子里最少数目的球。 分析理解 该题给定一个数组nums，其中的每个元素nums[i]代表第i个袋子中有几个小球。还给定了一个数maxOperations即最大操作数。接下来要对nums进行操作，每次操作可以将第i个袋子中的小球拆分到两个袋子里。总共进行的操作数不能超过maxOperations，最后要使得进行不超过maxOperations次的操作后，使得nums数组中的最大值最小（花了一点时间才理解doge）。 思路分析 这道题的一个关键点是寻找一个最小的“最大值”，也就是说我们找到的最大值mid，使得在进行不超过maxOperations次操作后，所有袋子中的小球数都不超过mid即nums中每个元素num都满足num &lt;=...</div></div></div></a><a class="pagination-related" href="/2025/02/13/leetcode14/" title="Leetcode 每日一题十四：1742. 盒子中小球的最大数量"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-13</div><div class="info-item-2">Leetcode 每日一题十四：1742. 盒子中小球的最大数量</div></div><div class="info-2"><div class="info-item-1">今日的Leetcode每日一题为1742. 盒子中小球的最大数量。 你在一家生产小球的玩具厂工作，有 n 个小球，编号从 lowLimit 开始，到 highLimit 结束（包括 lowLimit 和 highLimit ，即 n == highLimit - lowLimit + 1）。另有无限数量的盒子，编号从 1 到 infinity 。 你的工作是将每个小球放入盒子中，其中盒子的编号应当等于小球编号上每位数字的和。例如，编号 321 的小球应当放入编号 3 + 2 + 1 = 6 的盒子，而编号 10 的小球应当放入编号 1 + 0 = 1 的盒子。 给你两个整数 lowLimit 和 highLimit ，返回放有最多小球的盒子中的小球数量。如果有多个盒子都满足放有最多小球，只需返回其中任一盒子的小球数量。 思路分析 遍历[lowLimit, highLimit]，并且计算每位数字之和，然后记录到哈希表中，返回最大的一个，这是我的第一想法。 123456789101112131415161718192021222324class Solution...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Malone</div><div class="author-info-description">心之所向，素履以往</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Malone-AI"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Hello, World | Malone</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">分析理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">基本思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%90%86%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">代码理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.1.1.</span> <span class="toc-text">static关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inline%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.1.2.</span> <span class="toc-text">inline关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#randomLevel-%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.3.</span> <span class="toc-text">randomLevel 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E6%9C%89%E5%85%B3%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">2.1.4.</span> <span class="toc-text">跳表有关结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.1.5.</span> <span class="toc-text">跳表节点的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E8%8A%82%E7%82%B9%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">2.1.6.</span> <span class="toc-text">跳表节点的释放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E9%87%8A%E6%94%BE"><span class="toc-number">2.1.7.</span> <span class="toc-text">跳表的创建与释放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E7%9A%84%E6%90%9C%E7%B4%A2"><span class="toc-number">2.1.8.</span> <span class="toc-text">跳表的搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E4%B8%AD%E8%8A%82%E7%82%B9%E7%9A%84%E6%B7%BB%E5%8A%A0"><span class="toc-number">2.1.9.</span> <span class="toc-text">跳表中节点的添加</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.9.1.</span> <span class="toc-text">插入过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E8%A1%A8%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%A0%E9%99%A4"><span class="toc-number">2.1.10.</span> <span class="toc-text">跳表节点的删除</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.10.1.</span> <span class="toc-text">删除过程</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/leetcode26/" title="Leetcode 每日一题二十六：2502. 设计内存分配器">Leetcode 每日一题二十六：2502. 设计内存分配器</a><time datetime="2025-02-25T07:23:34.000Z" title="发表于 2025-02-25 15:23:34">2025-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/23/leetcode24/" title="Leetcode 每日一题二十四：1206. 设计跳表">Leetcode 每日一题二十四：1206. 设计跳表</a><time datetime="2025-02-23T02:41:38.000Z" title="发表于 2025-02-23 10:41:38">2025-02-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/22/leetcode23/" title="Leetcode 每日一题二十三：2506. 统计相似字符串对的数目">Leetcode 每日一题二十三：2506. 统计相似字符串对的数目</a><time datetime="2025-02-22T11:22:26.000Z" title="发表于 2025-02-22 19:22:26">2025-02-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/21/leetcode22/" title="Leetcode 每日一题二十二：2209. 用地毯覆盖后的最少白色砖块">Leetcode 每日一题二十二：2209. 用地毯覆盖后的最少白色砖块</a><time datetime="2025-02-21T04:43:08.000Z" title="发表于 2025-02-21 12:43:08">2025-02-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/20/leetcode21/" title="Leetcode 每日一题二十一：2595. 奇偶位数">Leetcode 每日一题二十一：2595. 奇偶位数</a><time datetime="2025-02-20T02:26:29.000Z" title="发表于 2025-02-20 10:26:29">2025-02-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Malone</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
