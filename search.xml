@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>malloc、free 和 new、delete 的区别</title>
+      <link href="/2025/02/27/cpp-interview1/"/>
+      <url>/2025/02/27/cpp-interview1/</url>
+      
+        <content type="html"><![CDATA[<p>malloc 和 free 是C语言的库函数， new 和 delete 是 C++ 里的操作符。谈到区别就要去讨论共同点与不同点，尤其要关注他们之间的差异。</p><h1>new 和 malloc</h1><ol><li>new 自动计算所需分配的内存大小，malloc需要手动计算。</li><li>返回值不同，new的返回值为对象类型的指针，而malloc返回的是<code>void*</code>类型的指针（使用malloc往往需要手动进行类型转换）。</li><li>new 分配失败时抛出异常std::bad_alloc，而malloc分配失败则返回NULL。</li><li>new 是free store上分配内存，而malloc是在堆上或者文件映射区。</li><li>new 分配的内存一般是初始化过的，malloc分配的内存没有经过初始化。</li></ol><h2 id="new-的工作过程">new 的工作过程</h2><ol><li>使用new操作符时，先调用operator new（这个可以重载）</li><li>然后申请所需的空间</li><li>最后调用构造函数，初始化成员变量</li></ol><h2 id="malloc">malloc</h2><ol><li>malloc分配的虚拟内存</li><li>malloc当分配的内存小于128K字节时通过brk系统调用在堆上分配内存，当超过128K字节时通过mmap系统调用在文件映射区分配内存</li></ol><h1>delete 和 free</h1><ol><li>delete 需要对象类型的指针，free 不需要关注需要释放对象的类型<ul><li>delete需要调用对应的析构函数，擦除类型delete就不知道调用什么析构函数了。</li></ul></li></ol><h2 id="delete-工作过程">delete 工作过程</h2><ol><li>先调用析构函数</li><li>再调用operator delete（也可以进行重载）</li><li>释放空间</li></ol><h2 id="free是如何知道要释放多大的空间">free是如何知道要释放多大的空间</h2><p>malloc分配内存的时候，事实上多分配了16字节的空间(16 + mem)，返回值返回mem的首地址。free的时候，就会向左偏移16字节，这16字节的空间存储了内存块的描述信息，包含mem的大小。free就是通过这种方式来获取要释放的空间大小，并且正因为此，free释放时无需关注所需释放对象的类型。</p><h2 id="free释放内存后，这块内存还在吗">free释放内存后，这块内存还在吗</h2><ul><li>如果内存块是通过brk系统调用获得的，内存管理器会将这块内存插入到其维护的<code>空闲链表</code>或<code>空闲内存池</code>中，以便在后续的内存分配请求中复用。</li><li>如果是通过mmap系统调用获得的，这块内存会归还给操作系统。</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> C/C++ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C/C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Leetcode 每日一题二十八：2296. 设计一个文本编辑器</title>
       <link href="/2025/02/27/leetcode28/"/>
       <url>/2025/02/27/leetcode28/</url>
@@ -911,9 +936,9 @@
       
         <tags>
             
-            <tag> Shell命令 </tag>
-            
             <tag> C语言 </tag>
+            
+            <tag> Shell命令 </tag>
             
             <tag> 操作系统 </tag>
             

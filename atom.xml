@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-02-27T12:14:07.054Z</updated>
+  <updated>2025-02-27T14:29:52.279Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>malloc、free 和 new、delete 的区别</title>
+    <link href="http://malone-ai.github.io/2025/02/27/cpp-interview1/"/>
+    <id>http://malone-ai.github.io/2025/02/27/cpp-interview1/</id>
+    <published>2025-02-27T13:51:24.000Z</published>
+    <updated>2025-02-27T14:29:52.279Z</updated>
+    
+    <content type="html"><![CDATA[<p>malloc 和 free 是C语言的库函数， new 和 delete 是 C++ 里的操作符。谈到区别就要去讨论共同点与不同点，尤其要关注他们之间的差异。</p><h1>new 和 malloc</h1><ol><li>new 自动计算所需分配的内存大小，malloc需要手动计算。</li><li>返回值不同，new的返回值为对象类型的指针，而malloc返回的是<code>void*</code>类型的指针（使用malloc往往需要手动进行类型转换）。</li><li>new 分配失败时抛出异常std::bad_alloc，而malloc分配失败则返回NULL。</li><li>new 是free store上分配内存，而malloc是在堆上或者文件映射区。</li><li>new 分配的内存一般是初始化过的，malloc分配的内存没有经过初始化。</li></ol><h2 id="new-的工作过程">new 的工作过程</h2><ol><li>使用new操作符时，先调用operator new（这个可以重载）</li><li>然后申请所需的空间</li><li>最后调用构造函数，初始化成员变量</li></ol><h2 id="malloc">malloc</h2><ol><li>malloc分配的虚拟内存</li><li>malloc当分配的内存小于128K字节时通过brk系统调用在堆上分配内存，当超过128K字节时通过mmap系统调用在文件映射区分配内存</li></ol><h1>delete 和 free</h1><ol><li>delete 需要对象类型的指针，free 不需要关注需要释放对象的类型<ul><li>delete需要调用对应的析构函数，擦除类型delete就不知道调用什么析构函数了。</li></ul></li></ol><h2 id="delete-工作过程">delete 工作过程</h2><ol><li>先调用析构函数</li><li>再调用operator delete（也可以进行重载）</li><li>释放空间</li></ol><h2 id="free是如何知道要释放多大的空间">free是如何知道要释放多大的空间</h2><p>malloc分配内存的时候，事实上多分配了16字节的空间(16 + mem)，返回值返回mem的首地址。free的时候，就会向左偏移16字节，这16字节的空间存储了内存块的描述信息，包含mem的大小。free就是通过这种方式来获取要释放的空间大小，并且正因为此，free释放时无需关注所需释放对象的类型。</p><h2 id="free释放内存后，这块内存还在吗">free释放内存后，这块内存还在吗</h2><ul><li>如果内存块是通过brk系统调用获得的，内存管理器会将这块内存插入到其维护的<code>空闲链表</code>或<code>空闲内存池</code>中，以便在后续的内存分配请求中复用。</li><li>如果是通过mmap系统调用获得的，这块内存会归还给操作系统。</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;malloc 和 free 是C语言的库函数， new 和 delete 是 C++ 里的操作符。谈到区别就要去讨论共同点与不同点，尤其要关注他们之间的差异。&lt;/p&gt;
+&lt;h1&gt;new 和 malloc&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;new 自动计算所需分配的内存大小，mall</summary>
+      
+    
+    
+    
+    <category term="C/C++" scheme="http://malone-ai.github.io/categories/C-C/"/>
+    
+    
+    <category term="C/C++" scheme="http://malone-ai.github.io/tags/C-C/"/>
+    
+  </entry>
   
   <entry>
     <title>Leetcode 每日一题二十八：2296. 设计一个文本编辑器</title>
@@ -558,38 +585,6 @@ uthash是一个单文件头库，只需要下载&lt;code&gt;uthash.h</summary>
     <category term="动态规划" scheme="http://malone-ai.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Leetcode 每日一题九：128. 最长连续序列</title>
-    <link href="http://malone-ai.github.io/2025/02/08/leetcode9/"/>
-    <id>http://malone-ai.github.io/2025/02/08/leetcode9/</id>
-    <published>2025-02-08T03:29:24.000Z</published>
-    <updated>2025-02-15T14:14:26.347Z</updated>
-    
-    <content type="html"><![CDATA[<p>今日的Leetcode每日一题为<a href="https://leetcode.cn/problems/longest-consecutive-sequence/description/">128. 最长连续序列</a>。</p><h1>分析理解</h1><p>题目给一个未排序的整数数组，要求我们找出一个最长的连续的子序列，当然不需要求这个子序列是什么，只需要求出他的长度。题目要求使用时间复杂度为O(n)的算法。</p><h1>思路分析</h1><p>由于题目要求使用时间复杂度为O(n)的算法，故排序是不可能用的了，因为排序的复杂度最低也为O(n log n)。但是提交完题解后发现，最快的方法竟然是排序，给我震惊呆住了。可能是官方的例子比较特殊等原因吧。不过接着看灵神给出的哈希表的方法。</p><p>首先将数组用哈希表去重，将数组转换为哈希集合即没有重复元素的集合。然后开始遍历哈希集合。</p><p>遍历的时候，对于每一个元素x：</p><ul><li>如果x-1存在于哈希集合中，就跳过当前元素；</li><li>如果x-1不存在与哈希集合中，就开始记录从x开始的连续子序列的长度。就是依次遍历x+1、x+2、x+3，…</li></ul><p>x-1存在于哈希集合时，跳过当前元素是因为最长连续子序列的长度一定不从x开始，可能从x-1、也可能从x-2开始，但不会是从x开始。这就是基本思路了，直接给出C++代码，下次试试用Rust：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">longestConsecutive</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="function">unordered_set&lt;<span class="type">int</span>&gt; <span class="title">hash</span><span class="params">(nums.begin(), nums.end())</span></span>;</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;i: hash) &#123;</span><br><span class="line">            <span class="keyword">if</span> (hash.<span class="built_in">count</span>(i<span class="number">-1</span>))</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            hash.<span class="built_in">insert</span>(i);</span><br><span class="line">            <span class="type">int</span> j = i + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> (hash.<span class="built_in">count</span>(j))</span><br><span class="line">                j++;</span><br><span class="line">            res = <span class="built_in">max</span>(j - i, res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;今日的Leetcode每日一题为&lt;a href=&quot;https://leetcode.cn/problems/longest-consecutive-sequence/description/&quot;&gt;128. 最长连续序列&lt;/a&gt;。&lt;/p&gt;
-&lt;h1&gt;分析理解&lt;/h1&gt;
-&lt;p&gt;题目</summary>
-      
-    
-    
-    
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
-    
-    <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
-    
-    <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    
-    <category term="数组" scheme="http://malone-ai.github.io/tags/%E6%95%B0%E7%BB%84/"/>
-    
-    <category term="并查集" scheme="http://malone-ai.github.io/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
     
   </entry>
   
