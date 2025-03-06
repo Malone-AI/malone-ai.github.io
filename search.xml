@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>CMake 保姆级教程[转载]</title>
+      <link href="/2025/03/06/chores3/"/>
+      <url>/2025/03/06/chores3/</url>
+      
+        <content type="html"><![CDATA[<p>提供一下一个优秀的个人博客网站中写的CMake教程的跳转链接（侵权删）：</p><ul><li><a href="https://subingwen.cn/cmake/CMake-primer/">CMake 保姆级教程（上）</a></li><li><a href="https://subingwen.cn/cmake/CMake-advanced/">CMake 保姆级教程（下）</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> C/C++ 那些事儿 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C/C++ </tag>
+            
+            <tag> CMake </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>GDB 调试</title>
       <link href="/2025/03/06/chores2/"/>
       <url>/2025/03/06/chores2/</url>
