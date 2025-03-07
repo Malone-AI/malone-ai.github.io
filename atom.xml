@@ -377,11 +377,11 @@
     <category term="设计模式" scheme="http://malone-ai.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
     
-    <category term="C++" scheme="http://malone-ai.github.io/tags/C/"/>
-    
     <category term="设计模式" scheme="http://malone-ai.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
     <category term="单例模式" scheme="http://malone-ai.github.io/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+    
+    <category term="C++" scheme="http://malone-ai.github.io/tags/C/"/>
     
   </entry>
   
@@ -390,16 +390,18 @@
     <link href="http://malone-ai.github.io/2025/03/01/java1/"/>
     <id>http://malone-ai.github.io/2025/03/01/java1/</id>
     <published>2025-03-01T09:36:40.000Z</published>
-    <updated>2025-03-01T09:54:24.154Z</updated>
+    <updated>2025-03-07T12:42:10.422Z</updated>
     
-    <content type="html"><![CDATA[<h1>JDK的下载与安装</h1><p>百度搜索JDK8到Oracle官网下载<code>Java SE Development Kit 8u202</code>即可，需要注册账号。</p><p>下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用。</p><h1>配置环境目录</h1><ol><li>编辑系统环境变量<ul><li>创建一个新的系统环境变量，名称为<code>JAVA_HOME</code>，值为java的安装路径</li></ul></li><li>配置PATH变量<ul><li>在PATH变量中添加<code>%JAVA_HOME%\bin</code></li><li>在PATH变量中添加<code>%JAVA_HOME%\jre\bin</code></li></ul></li><li>验证<ul><li>在cmd中输入<code>java -version</code></li><li>显示java的版本等信息即为成功</li></ul></li></ol>]]></content>
+    <content type="html"><![CDATA[<h1>1. JDK的下载与安装</h1><p>百度搜索JDK21到Oracle官网下载jdk21即可，需要注册账号。</p><p>下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用。</p><h1>2. jre 目录的生成</h1><p>准备配环境变量，突然发现jdk下没有jre目录。百度一搜发现需要手动生成jre。</p><ol><li>首先以管理员身份运行CMD</li><li>进入到jdk的安装目录</li><li>运行命令：</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin\jlink.exe --module-path jmods --add-modules java.desktop --output jre</span><br></pre></td></tr></table></figure><ol start="4"><li>此时会发现jre目录已经生成</li></ol><h1>3. 配置环境目录</h1><ol><li>编辑系统环境变量<ul><li>创建一个新的系统环境变量，名称为<code>JAVA_HOME</code>，值为java的安装路径</li></ul></li><li>配置PATH变量<ul><li>在PATH变量中添加<code>%JAVA_HOME%\bin</code></li><li>在PATH变量中添加<code>%JAVA_HOME%\jre\bin</code></li></ul></li><li>验证<ul><li>在cmd中输入<code>java -version</code></li><li>显示java的版本等信息即为成功</li></ul></li></ol>]]></content>
     
     
       
       
-    <summary type="html">&lt;h1&gt;JDK的下载与安装&lt;/h1&gt;
-&lt;p&gt;百度搜索JDK8到Oracle官网下载&lt;code&gt;Java SE Development Kit 8u202&lt;/code&gt;即可，需要注册账号。&lt;/p&gt;
-&lt;p&gt;下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用</summary>
+    <summary type="html">&lt;h1&gt;1. JDK的下载与安装&lt;/h1&gt;
+&lt;p&gt;百度搜索JDK21到Oracle官网下载jdk21即可，需要注册账号。&lt;/p&gt;
+&lt;p&gt;下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用。&lt;/p&gt;
+&lt;h1&gt;2. jre 目录的生成&lt;/h1&gt;
+&lt;p&gt;准备</summary>
       
     
     
@@ -489,9 +491,9 @@
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/categories/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
     
     
-    <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
-    
     <category term="Leetcode 每日一题" scheme="http://malone-ai.github.io/tags/Leetcode-%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
+    
+    <category term="哈希表" scheme="http://malone-ai.github.io/tags/%E5%93%88%E5%B8%8C%E8%A1%A8/"/>
     
     <category term="设计" scheme="http://malone-ai.github.io/tags/%E8%AE%BE%E8%AE%A1/"/>
     
