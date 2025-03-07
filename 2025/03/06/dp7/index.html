@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>动态规划七：状态机DP | 零一世界</title><meta name="author" content="Malone"><meta name="copyright" content="Malone"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="今日学习灵茶山艾府的买卖股票的最佳时机【基础算法精讲 21】。 1. 买卖股票的最佳时机 II Leetcode 官方题目122. 买卖股票的最佳时机 II。 1.1 题目描述 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。 在每一天，你可以决定是否购买和&#x2F;或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。 返回">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态规划七：状态机DP">
+<meta property="og:url" content="http://malone-ai.github.io/2025/03/06/dp7/index.html">
+<meta property="og:site_name" content="零一世界">
+<meta property="og:description" content="今日学习灵茶山艾府的买卖股票的最佳时机【基础算法精讲 21】。 1. 买卖股票的最佳时机 II Leetcode 官方题目122. 买卖股票的最佳时机 II。 1.1 题目描述 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。 在每一天，你可以决定是否购买和&#x2F;或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。 返回">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://malone-ai.github.io/images/doge.jpg">
+<meta property="article:published_time" content="2025-03-06T12:12:25.000Z">
+<meta property="article:modified_time" content="2025-03-07T05:50:09.099Z">
+<meta property="article:author" content="Malone">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://malone-ai.github.io/images/doge.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "动态规划七：状态机DP",
+  "url": "http://malone-ai.github.io/2025/03/06/dp7/",
+  "image": "http://malone-ai.github.io/images/doge.jpg",
+  "datePublished": "2025-03-06T12:12:25.000Z",
+  "dateModified": "2025-03-07T05:50:09.099Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Malone",
+      "url": "http://malone-ai.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://malone-ai.github.io/2025/03/06/dp7/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '动态规划七：状态机DP',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="零一世界" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/background.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">零一世界</span></a><a class="nav-page-title" href="/"><span class="site-name">动态规划七：状态机DP</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">动态规划七：状态机DP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-06T12:12:25.000Z" title="发表于 2025-03-06 20:12:25">2025-03-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-07T05:50:09.099Z" title="更新于 2025-03-07 13:50:09">2025-03-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>今日学习灵茶山艾府的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ho4y1W7QK/?spm_id_from=333.1245.0.0&amp;vd_source=a0f19e79b7da02f4fa318d91be5bc86a">买卖股票的最佳时机【基础算法精讲 21】</a>。</p>
+<h1>1. 买卖股票的最佳时机 II</h1>
+<p>Leetcode 官方题目<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/">122. 买卖股票的最佳时机 II</a>。</p>
+<h1>1.1 题目描述</h1>
+<p>给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。</p>
+<p>在每一天，你可以决定是否购买和/或出售股票。你在任何时候 最多 只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。</p>
+<p>返回 你能获得的 最大 利润 。</p>
+<p>示例 1：</p>
+<pre><code>输入：prices = [7,1,5,3,6,4]
+输出：7
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。
+随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3。
+最大总利润为 4 + 3 = 7 。
+</code></pre>
+<p>示例 2：</p>
+<pre><code>输入：prices = [1,2,3,4,5]
+输出：4
+解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。
+最大总利润为 4 。
+</code></pre>
+<p>示例 3：</p>
+<pre><code>输入：prices = [7,6,4,3,1]
+输出：0
+解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0。
+</code></pre>
+<h1>1.2 思路</h1>
+<p><code>启发思路</code>：最后一天发生了什么？</p>
+<p>对于 prices = [7,1,5,3,6,4]</p>
+<pre><code>从第0天开始到第5天结束时的利润
+= 从第0天开始到第4天结束时的利润 + 第5天的利润
+= 。。。
+</code></pre>
+<p>如果第5天什么也没做，那么利润是0。如果买入4块钱的股票，那么利润是-4。如果4块钱卖掉股票，那么利润是4（即赚了4块钱，但是这里说的赚了4块钱没有考虑买入股票花的钱）。假如第5天卖掉的股票是花6块钱买入的，那么这个利润-6需要算在第0天开始到第4天结束时的利润里面。</p>
+<p>那么第i天我们可以做哪些事儿呢？看这张图：<br>
+<img src="/images/dp7_1.jpg" alt=""></p>
+<ul>
+<li>什么也不做
+<ul>
+<li>状态不变</li>
+</ul>
+</li>
+<li>买入股票
+<ul>
+<li>那么就从第i-1天未持有股票的状态，变成第i天结束时持有股票的状态</li>
+</ul>
+</li>
+<li>卖出股票
+<ul>
+<li>那么就从第i-1天持有股票的状态，变成第i天结束时未持有股票的状态</li>
+</ul>
+</li>
+</ul>
+<p>从图中可以看出状态转移一共有四种状态，其中持有股票或者未持有股票时，既不买入也不卖出是两种状态。</p>
+<ul>
+<li>定义 dfs(i,0)表示到第i天结束时，未持有股票的最大利润</li>
+<li>定义 dfs(i,1)表示到第i天结束时，持有股票的最大利润</li>
+</ul>
+<p>（这里的参数0/1是一个bool类型的值。）</p>
+<p>由于第i-1天的结束就是第i天的开始dfs(i-1,·)也表示到第i天开始时的最大利润。</p>
+<p>继而可以得到以下图：<br>
+<img src="/images/dp7_2.jpg" alt=""></p>
+<p>从每个状态可以转移到其他状态，将这些其他状态取最大值就可以得到：</p>
+<pre><code>dfs(i, 0) = max(dfs(i-1, 0) + dfs(i-1, 1) - prices[i])
+dfs(i, 1) = max(dfs(i-1, 1) + dfs(i-1, 0) + prices[i])
+</code></pre>
+<p>递归边界：</p>
+<pre><code>dfs(-1, 0) = 0  第0天`开始时`未持有股票，利润为0
+dfs(-1, 1) = 0  第0天`开始时`不可能持有股票
+</code></pre>
+<p>递归入口：</p>
+<pre><code>max(dfs(n-1, 0), dfs(n-1, 1))
+= dfs(n-1, 0)
+</code></pre>
+<p>看上去枚举最后一天是否持有股票就可以了，但是如果最后一天结束时还持有股票，这个股票在后面就卖不出去了（或者说不在题目考虑的范围内）。所以dfs(n-1, 1)是不会比dfs(n-1, 0)大的，故从dfs(n-1, 0)开始递归即可。</p>
+<h1>1.3 具体实现</h1>
+<h1>1.3.1 递归</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">memo</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">-1</span>));</span><br><span class="line">        <span class="keyword">auto</span> dfs = [&amp;](<span class="keyword">this</span> <span class="keyword">auto</span>&amp;&amp; dfs, <span class="type">int</span> i, <span class="type">int</span> j)-&gt;<span class="type">int</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> j == <span class="number">0</span> ? <span class="number">0</span> : INT_MIN / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span>&amp; res = memo[i][j];</span><br><span class="line">            <span class="keyword">if</span> (res != <span class="number">-1</span>)</span><br><span class="line">                <span class="keyword">return</span> res;</span><br><span class="line">            <span class="keyword">return</span> res = j == <span class="number">0</span> ? <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">1</span>) + prices[i]) : <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">1</span>), <span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">0</span>) - prices[i]);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(n<span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.3.2 递推 空间复杂度O(n)</h1>
+<p>递归很容易翻译成递推：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">f</span>(n + <span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">1</span>] = INT_MIN / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            f[i + <span class="number">1</span>][<span class="number">0</span>] = <span class="built_in">max</span>(f[i][<span class="number">0</span>], f[i][<span class="number">1</span>] + prices[i]);</span><br><span class="line">            f[i + <span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(f[i][<span class="number">1</span>], f[i][<span class="number">0</span>] - prices[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.3.3 递推 空间复杂度O(1) 两个数组</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推 空间复杂度O(1) 两个数组</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">f</span>(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">1</span>] = INT_MIN / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            f[(i + <span class="number">1</span>) % <span class="number">2</span>][<span class="number">0</span>] = <span class="built_in">max</span>(f[i % <span class="number">2</span>][<span class="number">0</span>], f[i % <span class="number">2</span>][<span class="number">1</span>] + prices[i]);</span><br><span class="line">            f[(i + <span class="number">1</span>) % <span class="number">2</span>][<span class="number">1</span>] = <span class="built_in">max</span>(f[i % <span class="number">2</span>][<span class="number">1</span>], f[i % <span class="number">2</span>][<span class="number">0</span>] - prices[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n % <span class="number">2</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.3.4 递推 空间复杂度O(1) 不用数组</h1>
+<p>这种貌似难想，但其实画个图再对照一下两个数组的代码就很容易想到了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推 空间复杂度O(1) 不用数组</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> f0 = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> f1 = INT_MIN / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> f0_tmp = f0;</span><br><span class="line">            f0 = <span class="built_in">max</span>(f0, f1 + prices[i]);</span><br><span class="line">            f1 = <span class="built_in">max</span>(f1, f0_tmp - prices[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.4 变形题目：309. 买卖股票的最佳时机含冷冻期</h1>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/">309. 买卖股票的最佳时机含冷冻期</a>。</p>
+<h1>1.4.1 题目描述</h1>
+<p>给定一个整数数组prices，其中 prices[i] 表示第 i 天的股票价格 。​</p>
+<p>设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:</p>
+<p>卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。<br>
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<p>示例 1:</p>
+<pre><code>输入: prices = [1,2,3,0,2]
+输出: 3 
+解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+</code></pre>
+<p>示例 2:</p>
+<pre><code>输入: prices = [1]
+输出: 0
+</code></pre>
+<h1>1.4.2 思路</h1>
+<p>这道题有冷冻期，就是在卖出后不能立刻买入股票。换句话就是买入股票的时候，前一天不能有卖出操作。这其实和和<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber/description/">198. 打家劫舍</a>很像。在打家劫舍中，从右往左思考，如果选第i个房子，那么第i-1个房子不能选，所以直接递归到第i-2个房子。</p>
+<p>这道题也是一样的。<br>
+状态转移：</p>
+<ul>
+<li>如果今天不持有股票，那么有两种可能：
+<ul>
+<li>前一天也不持有股票，今天什么都不做。</li>
+<li>前一天持有股票，今天卖出股票。</li>
+<li>因此，状态转移方程为：dfs(i, 0) = max(dfs(i-1, 0), dfs(i-1, 1) + prices[i])</li>
+</ul>
+</li>
+<li>如果今天持有股票，那么有两种可能：
+<ul>
+<li>前一天也持有股票，今天什么都不做。</li>
+<li>前两天不持有股票，今天买入股票（因为有冷冻期，所以不能在前一天卖出后立即买入）。</li>
+<li>因此，状态转移方程为：dfs(i, 1) = max(dfs(i-1, 1), dfs(i-2, 0) - prices[i])</li>
+</ul>
+</li>
+</ul>
+<h1>1.4.3 递归</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">memo</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">-1</span>));</span><br><span class="line">        <span class="keyword">auto</span> dfs = [&amp;](<span class="keyword">this</span> <span class="keyword">auto</span>&amp;&amp; dfs, <span class="type">int</span> i, <span class="type">int</span> j)-&gt;<span class="type">int</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> j == <span class="number">0</span> ? <span class="number">0</span> : INT_MIN / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span>&amp; res = memo[i][j];</span><br><span class="line">            <span class="keyword">if</span> (res != <span class="number">-1</span>)</span><br><span class="line">                <span class="keyword">return</span> res;</span><br><span class="line">            <span class="keyword">return</span> res = j == <span class="number">0</span> ? <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">1</span>) + prices[i]) : <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, <span class="number">1</span>), <span class="built_in">dfs</span>(i<span class="number">-2</span>, <span class="number">0</span>) - prices[i]);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(n<span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.4.4 递推 空间复杂度 O(n)</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推 空间复杂度 O(n)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">f</span>(n + <span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">-1</span>));</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        f[<span class="number">0</span>][<span class="number">1</span>] = INT_MIN / <span class="number">2</span>;</span><br><span class="line">        f[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        f[<span class="number">1</span>][<span class="number">1</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            f[i<span class="number">+2</span>][<span class="number">0</span>] = <span class="built_in">max</span>(f[i<span class="number">+1</span>][<span class="number">0</span>], f[i<span class="number">+1</span>][<span class="number">1</span>] + prices[i]);</span><br><span class="line">            f[i<span class="number">+2</span>][<span class="number">1</span>] = <span class="built_in">max</span>(f[i<span class="number">+1</span>][<span class="number">1</span>], f[i][<span class="number">0</span>] - prices[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n + <span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>1.4.5 递推 空间复杂度 O(1)</h1>
+<p>这个空间复杂度为O(1)的是真想不明白😂。</p>
+<h1>2. 买卖股票的最佳时机 IV</h1>
+<p>Leetcode 官方题目<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/description/">188. 买卖股票的最佳时机 IV</a>。</p>
+<h1>2.1 题目描述</h1>
+<p>给你一个整数数组 prices 和一个整数 k ，其中 prices[i] 是某支给定的股票在第 i 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。也就是说，你最多可以买 k 次，卖 k 次。</p>
+<p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<p>示例 1：</p>
+<pre><code>输入：k = 2, prices = [2,4,1]
+输出：2
+解释：在第 1 天 (股票价格 = 2) 的时候买入，在第 2 天 (股票价格 = 4) 的时候卖出，这笔交易所能获得利润 = 4-2 = 2 。
+</code></pre>
+<p>示例 2：</p>
+<pre><code>输入：k = 2, prices = [3,2,6,5,0,3]
+输出：7
+解释：在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
+随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+</code></pre>
+<h1>2.2 基本思路</h1>
+<p>定义 dfs(i,j,0) 表示到第 i 天<code>结束</code>时完成<code>至多</code> j 笔交易，未持有股票的最大利润。<br>
+定义 dfs(i,j,1) 表示到第 i 天<code>结束</code>时完成<code>至多</code> j 笔交易，持有股票的最大利润。</p>
+<p>状态转移图如下图：</p>
+<p><img src="/images/dp7_3.jpg" alt=""></p>
+<p>既然有次数限制，就应当在递归过程中记录次数。所以在无限次交易的基础上增加一个参数j，表示<code>至多</code>完成j笔交易。转移方程需要修改的地方就是在买入或者卖出的地方把交易次数减1，如果买入减1，后面卖出的时候就不用减1。</p>
+<pre><code>dfs(i,j,0) = max(dfs(i-1,j,0), dfs(i-1,j,1) + prices[i])
+dfs(i,j,1) = max(dfs(i-1,j,1), dfs(i-1,j-1,0) - prices[i])
+</code></pre>
+<p>递归边界：</p>
+<pre><code>dfs(·, -1, ·) = -∞, 任何情况下，j都不能为负
+dfs(-1, j, 0) = 0, 第 0 天开始未持有股票，利润为 0
+dfs(-1, j, 1) = -∞，第 0 天开始不可能持有股票
+</code></pre>
+<h1>2.3 具体实现</h1>
+<h1>2.3.1 递归</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(<span class="type">int</span> k, vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&gt; <span class="built_in">memo</span>(n, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;(k + <span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, <span class="number">-1</span>)));</span><br><span class="line">        <span class="keyword">auto</span> dfs = [&amp;](<span class="keyword">this</span> <span class="keyword">auto</span>&amp;&amp; dfs, <span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> l)-&gt;<span class="type">int</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (j &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> INT_MIN / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> l == <span class="number">0</span> ? <span class="number">0</span> : INT_MIN / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span>&amp; res = memo[i][j][l];</span><br><span class="line">            <span class="keyword">if</span> (res != <span class="number">-1</span>)</span><br><span class="line">                <span class="keyword">return</span> res;</span><br><span class="line">            <span class="keyword">return</span> res = l == <span class="number">0</span> ? <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, j, <span class="number">0</span>), <span class="built_in">dfs</span>(i<span class="number">-1</span>, j, <span class="number">1</span>) + prices[i]) : <span class="built_in">max</span>(<span class="built_in">dfs</span>(i<span class="number">-1</span>, j, <span class="number">1</span>), <span class="built_in">dfs</span>(i<span class="number">-1</span>, j<span class="number">-1</span>, <span class="number">0</span>) - prices[i]);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(n - <span class="number">1</span>, k, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>2.3.2 递推 空间复杂度O(n*k)</h1>
+<ul>
+<li>
+<p>为什么第二维度的大小是 k+2？</p>
+<ul>
+<li>在记忆化搜索中，j 的范围是 [−1,k]，这一共有 k+2 个数。1:1 翻译成递推就需要 k+2 的数组大小。</li>
+</ul>
+</li>
+<li>
+<p>f 数组中的 j=0 表示什么意思？</p>
+<ul>
+<li>这对应着记忆化搜索中的 j=−1 的状态，也就是交易 −1 次的状态。注意这是不合法的，所以初始值一定是 −∞。</li>
+</ul>
+</li>
+<li>
+<p>f 的初始值怎么确定？</p>
+<ul>
+<li>f 的初始值来自记忆化搜索的递归边界，递归边界怎么写，初始值就怎么写。</li>
+</ul>
+</li>
+</ul>
+<p>作者：灵茶山艾府<br>
+链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/solutions/2201488/shi-pin-jiao-ni-yi-bu-bu-si-kao-dong-tai-kksg/">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/solutions/2201488/shi-pin-jiao-ni-yi-bu-bu-si-kao-dong-tai-kksg/</a><br>
+来源：力扣（LeetCode）<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推 空间复杂度O(n*k)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(<span class="type">int</span> k, vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&gt; <span class="built_in">f</span>(n + <span class="number">1</span>, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;(k + <span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, INT_MIN / <span class="number">2</span>)));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; k + <span class="number">2</span>; ++j)</span><br><span class="line">            f[<span class="number">0</span>][j][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; k + <span class="number">2</span>; ++j) &#123;</span><br><span class="line">                f[i<span class="number">+1</span>][j][<span class="number">0</span>] = <span class="built_in">max</span>(f[i][j][<span class="number">0</span>], f[i][j][<span class="number">1</span>] + prices[i]);</span><br><span class="line">                f[i<span class="number">+1</span>][j][<span class="number">1</span>] = <span class="built_in">max</span>(f[i][j][<span class="number">1</span>], f[i][j<span class="number">-1</span>][<span class="number">0</span>] - prices[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n][k<span class="number">+1</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1>2.3.3 递推 空间复杂度O(k)</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递推 空间复杂度O(k)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(<span class="type">int</span> k, vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = prices.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&gt; <span class="built_in">f</span>(<span class="number">2</span>, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;(k + <span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>, INT_MIN / <span class="number">2</span>)));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; k + <span class="number">2</span>; ++j)</span><br><span class="line">            f[<span class="number">0</span>][j][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; k + <span class="number">2</span>; ++j) &#123;</span><br><span class="line">                f[(i<span class="number">+1</span>)%<span class="number">2</span>][j][<span class="number">0</span>] = <span class="built_in">max</span>(f[i%<span class="number">2</span>][j][<span class="number">0</span>], f[i%<span class="number">2</span>][j][<span class="number">1</span>] + prices[i]);</span><br><span class="line">                f[(i<span class="number">+1</span>)%<span class="number">2</span>][j][<span class="number">1</span>] = <span class="built_in">max</span>(f[i%<span class="number">2</span>][j][<span class="number">1</span>], f[i%<span class="number">2</span>][j<span class="number">-1</span>][<span class="number">0</span>] - prices[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n%<span class="number">2</span>][k<span class="number">+1</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io">Malone</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io/2025/03/06/dp7/">http://malone-ai.github.io/2025/03/06/dp7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://malone-ai.github.io" target="_blank">零一世界</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></div><div class="post-share"><div class="social-share" data-image="/images/doge.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/01/30/algorithm1/" title="收收心，开始学习算法：子集和DP"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-30</div><div class="info-item-2">收收心，开始学习算法：子集和DP</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/02/28/dp3/" title="动态规划三：0-1背包"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-28</div><div class="info-item-2">动态规划三：0-1背包</div></div><div class="info-2"><div class="info-item-1">前言 今日继续学习B站Up主出品的基础算法精讲系列，0-1背包 完全背包【基础算法精讲 18】（点击即可跳转视频链接）。 0-1背包和完全背包是非常重要的DP模型，灵茶山艾府认为一定程度上它们就是“选或不选”思想的代表。 这篇博客主要关注0-1背包。 1. 0-1 背包 1.1 问题描述 0-1 背包:有 n 个物品，第i个物品的体积为 w[i]，价值为 v[i]，每个物品至多选一个，求体积和不超过 capacity 时的最大价值和。 1.2...</div></div></div></a><a class="pagination-related" href="/2025/03/04/dp6/" title="动态规划六：最长递增子序列"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-04</div><div class="info-item-2">动态规划六：最长递增子序列</div></div><div class="info-2"><div class="info-item-1">今日学习灵茶山艾府出品的最长递增子序列【基础算法精讲 20】。 UP通过Leetcode官方题300. 最长递增子序列进行讲解。 300. 最长递增子序列 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。 子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。 示例 1： 输入：nums = [10,9,2,5,3,7,101,18] 输出：4 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。  示例 2： 输入：nums = [0,1,0,3,2,3] 输出：4  示例 3： 输入：nums = [7,7,7,7,7,7,7] 输出：1  基本思路 由于子序列是数组的一个子集，因此用子集型回溯来思考，也就是[选或不选]或者[枚举选哪个]。 对于nums = [1, 6, 7, 2, 4, 5,...</div></div></div></a><a class="pagination-related" href="/2025/03/02/dp5/" title="动态规划五：线性DP"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-02</div><div class="info-item-2">动态规划五：线性DP</div></div><div class="info-2"><div class="info-item-1">今日继续学习灵茶山艾府的基础算法精讲系列中的最长公共子序列 编辑距离【基础算法精讲 19】（本文内容参考该视频，点击即可跳转视频，非商业引用，侵权联系删）。 灵茶山艾府主要通过两道Leetcode题进行讲解：1143. 最长公共子序列和72. 编辑距离。 1143. 最长公共子序列 给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。如果不存在公共子序列，返回 0 。 一个字符串的子序列是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。  例如，“ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde”...</div></div></div></a><a class="pagination-related" href="/2025/02/09/leetcode10/" title="Leetcode 每日一题十：63. 不同路径 II"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-09</div><div class="info-item-2">Leetcode 每日一题十：63. 不同路径 II</div></div><div class="info-2"><div class="info-item-1">今日Leetcode每日一题为63. 不同路径 II。 给定一个 m x n 的整数数组 grid。一个机器人初始位于 左上角（即 grid[0][0]）。机器人尝试移动到 右下角（即 grid[m - 1][n - 1]）。机器人每次只能向下或者向右移动一步。 网格中的障碍物和空位置分别用 1 和 0 来表示。机器人的移动路径中不能包含 任何 有障碍物的方格。 返回机器人能够到达右下角的不同路径数量。 测试用例保证答案小于等于 2 * 10^9。 提示：  m == obstacleGrid.length n == obstacleGrid[i].length 1 &lt;= m, n &lt;= 100 obstacleGrid[i][j] 为 0 或 1  分析理解 提供一个mxn二维数组grid，其中的元素为1代表有障碍物，为0代表无障碍物。机器人初始位于(0, 0)处，目的地为(m-1, n-1)，需要我们求出从(0, 0)到(m-1, n-1)的路径个数。 基本思路 使用动态规划求解，求解一个二维的dp数组，dp[i+1][j+1]来代表从(0, 0)到(i,...</div></div></div></a><a class="pagination-related" href="/2025/02/13/leetcode14/" title="Leetcode 每日一题十四：1742. 盒子中小球的最大数量"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-13</div><div class="info-item-2">Leetcode 每日一题十四：1742. 盒子中小球的最大数量</div></div><div class="info-2"><div class="info-item-1">今日的Leetcode每日一题为1742. 盒子中小球的最大数量。 你在一家生产小球的玩具厂工作，有 n 个小球，编号从 lowLimit 开始，到 highLimit 结束（包括 lowLimit 和 highLimit ，即 n == highLimit - lowLimit + 1）。另有无限数量的盒子，编号从 1 到 infinity 。 你的工作是将每个小球放入盒子中，其中盒子的编号应当等于小球编号上每位数字的和。例如，编号 321 的小球应当放入编号 3 + 2 + 1 = 6 的盒子，而编号 10 的小球应当放入编号 1 + 0 = 1 的盒子。 给你两个整数 lowLimit 和 highLimit ，返回放有最多小球的盒子中的小球数量。如果有多个盒子都满足放有最多小球，只需返回其中任一盒子的小球数量。 思路分析 遍历[lowLimit, highLimit]，并且计算每位数字之和，然后记录到哈希表中，返回最大的一个，这是我的第一想法。 123456789101112131415161718192021222324class Solution...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Malone</div><div class="author-info-description">心之所向，素履以往</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Malone-AI"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Hello, World | Malone</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">1. 买卖股票的最佳时机 II</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">1.1 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">1.2 思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">1.3 具体实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">1.3.1 递归</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">1.3.2 递推 空间复杂度O(n)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">1.3.3 递推 空间复杂度O(1) 两个数组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">1.3.4 递推 空间复杂度O(1) 不用数组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">1.4 变形题目：309. 买卖股票的最佳时机含冷冻期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">1.4.1 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">1.4.2 思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">1.4.3 递归</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">1.4.4 递推 空间复杂度 O(n)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">1.4.5 递推 空间复杂度 O(1)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">15.</span> <span class="toc-text">2. 买卖股票的最佳时机 IV</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">16.</span> <span class="toc-text">2.1 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">17.</span> <span class="toc-text">2.2 基本思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">18.</span> <span class="toc-text">2.3 具体实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">19.</span> <span class="toc-text">2.3.1 递归</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">20.</span> <span class="toc-text">2.3.2 递推 空间复杂度O(n*k)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">21.</span> <span class="toc-text">2.3.3 递推 空间复杂度O(k)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/06/dp7/" title="动态规划七：状态机DP">动态规划七：状态机DP</a><time datetime="2025-03-06T12:12:25.000Z" title="发表于 2025-03-06 20:12:25">2025-03-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/06/my-feelings2/" title="总结一下最近">总结一下最近</a><time datetime="2025-03-06T10:01:04.000Z" title="发表于 2025-03-06 18:01:04">2025-03-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/06/chores3/" title="CMake 保姆级教程[转载]">CMake 保姆级教程[转载]</a><time datetime="2025-03-06T05:48:34.000Z" title="发表于 2025-03-06 13:48:34">2025-03-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/06/chores2/" title="GDB 调试">GDB 调试</a><time datetime="2025-03-06T03:16:07.000Z" title="发表于 2025-03-06 11:16:07">2025-03-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/05/cpp-interview3/" title="左值引用 与 右值引用">左值引用 与 右值引用</a><time datetime="2025-03-05T15:40:27.000Z" title="发表于 2025-03-05 23:40:27">2025-03-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Malone</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
