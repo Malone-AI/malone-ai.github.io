@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-03-10T16:52:08.524Z</updated>
+  <updated>2025-03-11T15:16:20.699Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>YOLO</title>
+    <link href="http://malone-ai.github.io/2025/03/11/yolo1/"/>
+    <id>http://malone-ai.github.io/2025/03/11/yolo1/</id>
+    <published>2025-03-11T03:35:43.000Z</published>
+    <updated>2025-03-11T15:16:20.699Z</updated>
+    
+    <content type="html"><![CDATA[<h1>1. 目标检测综述</h1><p>目标检测分为：</p><ul><li>one-stage detector（单阶段模型）<ul><li>代表有Yolo、SSD、Retina-net</li></ul></li><li>two-stage detector（两阶段模型）<ul><li>先从图像提取若干候选框，再逐一对这些候选框做分类、甄别以及调整它们的坐标。</li><li>代表有RCNN、SPPNet、Fast RCNN</li></ul></li></ul><p>R-CNN——Regions with CNN features</p><ol><li>输入图像</li><li>提取候选区域（~2k）</li><li>计算CNN特征</li><li>将区域分类</li></ol><p>YOLO论文链接<a href="https://arxiv.org/pdf/1506.02640">You Only Look Once:Unifed, Real-Time Obiect Detection</a></p><h1>2. 预测阶段（前向推断）</h1><p>此时模型是已经训练好的，输入未知图片进行预测，此时没有反向传播，只有前向推断。</p><h2 id="2-1-Yolo-网络架构">2.1 Yolo 网络架构</h2><p><img src="/images/yolo1_1.png" alt=""><br><img src="image.png" alt="alt text"></p><p>24层卷积层提取图像特征，2层全连接层回归得到7x7x30的向量。</p><p>输入是448x448x3的图像，也就是先将一张彩色图片缩放成448x448像素的图片，3是3通道RGB。然后经过若干个卷积层、池化层，最后变成一个7x7x1024维的feature map。再把它拉直，喂到一个4096个神经元的全连接层中输出4096维的向量。再把这个4096维向量喂到1470（7x7x30）个神经元的全连接层中，输出1470维的向量（其实最后是把这个1470维的向量Reshape成了7x7x30的向量）。最后输出的7x7x30维的向量包含就包含了所有预测框的坐标、置信度和类别结果。我们只需要解析这个向量就可以获得最终的结果。这个就是整个黑箱子的框架。</p><h2 id="2-2-为什么是7x7x30呢？">2.2 为什么是7x7x30呢？</h2><p>因为网络先把图像划分为SxS个grid cell（也就是网格），在YOLOV1中S=7。每个grid cell预测出B个bounding box（预测框），YOLOV1中B=2。每个grid cell预测出的两个bounding box可能很大也可能很小，也可能与其他的bounding box存在重叠，但是无所谓，只要bounding box的中心点落在这个grid cell里，就说明这个bounding box是由这个grid cell生成的。</p><p><img src="/images/yolo1_2.png" alt=""><br><img src="image-1.png" alt="alt text"></p><p>7x7=49个grid cell，每个grid cell生成两个bounding box，那么就生成了98个bounding box。bounding box包含x、y、h、w这四个坐标，由这四个坐标可以确定bounding box的位置。另外bounding box还包含一个它含不含有一个object的置信度（我理解为这个bounding box中含有物体的概率P(object)），在图像中置信度由bounding box边框线的粗细来表示，越粗置信度越高。这样一个bounding box可以由四个位置参数和一个置信度参数组成的(x,y,h,w,c)来表示。可视化出来就是上面图中由密密麻麻黑线的这幅图。</p><p>另外，每个grid cell还能生成所有类别的条件概率。也就是，假设输入在包含object的情况下，这些object是某个类别的概率。也就是上面图中有彩色块的图。把每个bounding box的置信度乘以类别条件概率，就能获得每个bounding box属于各类别的概率。7x7x30中的30为SxSx(5xB+C)。</p><p>再详细解释一些这个30。</p><p>每个grid cell包含2（即B）个预测框，每个预测框有5个参数，然后在Pascal VOC中包含20（即C）个类别。这一个30就是一个grid cell的信息，总共7x7个grid cell，所以是7x7x30维的向量。</p><p><img src="/images/yolo1_3.png" alt=""><br><img src="image-2.png" alt="alt text"><br>注：图中的box即bounding box</p><p>总结一下就是，输入一张图像，YOLO就能SxS个grid cell的信息，每个grid cell包含2个bounding box和20个类别，每个bounding box又包含4个位置参数和一个置信度参数。</p><h2 id="2-3-可视化过程">2.3 可视化过程</h2><ol><li><p>首先把图像分成SxS个grid cell，这里S=7：<br><img src="/images/yolo1_4.png" alt=""><br><img src="image-3.png" alt="alt text"></p></li><li><p>每个grid cell预测出两个bounding box（包含四个位置参数和一个置信度参数）</p></li></ol><p>比如对于下面图中这个红色的grid cell：<br><img src="/images/yolo1_5.png" alt=""><br><img src="image-4.png" alt="alt text"></p><p>它预测出两个bounding box，这两个bounding box一个置信度比较高，一个比较低（由线的粗细表示）：</p><p><img src="/images/yolo1_6.png" alt=""><br><img src="image-5.png" alt="alt text"></p><p>不管如何，输入图像都能预测出SxSx2=98个bounding box，只不过有些bounding box的置信度高，我们将其保留；有些低我们将其忽略。</p><ol start="3"><li>每个grid cell还能生成20个类别的条件概率：</li></ol><p><img src="/images/yolo1_7.png" alt=""><br><img src="image-6.png" alt="alt text"></p><p>这个图就展示了条件概率最高的几个类别所占有的框。比如紫色的grid cell是Bicycle这个类别的条件概率高的区域。每一个grid cell只能有一个类别，它是20个类别中条件概率最高的那一个。因此也说明了一个grid cell最多预测出一个一物体。7x7的grid cell最多预测出49个物体。这也是YOLOV1对小目标和密集目标识别性能差的原因。</p><ol start="4"><li>后处理<br>每个grid cell只有一个条件概率最高的代表类别，把这个grid cell的两个bounding box都赋予这个类别，再进行一系列后处理就得到了最终的目标检测结果。</li></ol><p><img src="/images/yolo1_8.png" alt=""><br><img src="image-7.png" alt="alt text"></p><p>把上面图中用红色部分标出来的部分，也就是所有的bounding box和所有grid cell的代表类别。每个类别赋予不同的颜色，把所有的bounding box的边框都用代表类别的颜色来表示，就得到了下面这幅图：</p><p><img src="/images/yolo1_9.png" alt=""><br><img src="image-8.png" alt="alt text"></p><p>总共98个bounding box，每个bounding box都有最高条件概率所对应的类别，再进行一系列后处理，比如过滤掉低置信度的bounding box，然后再去除掉重复的预测框，就获得了最终的目标检测结果。</p><h1>3. 预测阶段后处理</h1><p>总共98个bounding box，过滤掉低置信度的bounding box，然后再去除掉重复的预测框，就获得了最终的目标检测结果，这个过程称为<strong>NMS非极大值抑制</strong>。</p><p>现在想要讲解的就是YOLOV1输出的7x7x30的向量是如何变为最后的目标检测结果的。</p><p>7x7x30中的7x7即7x7个grid cell，取出其中一个grid cell来看，也就是30个数字。这30个数字是5+5+20。第一个5是第一个bounding box的4个位置坐标和1个置信度坐标，第二个5是第二个bounding box的4个位置坐标和1个置信度坐标，20是这个grid cell中的物体是20个类别的条件概率即P(ci|object)（P(object)是这个grid cell包含物体的概率，这其实就是置信度，ci是第i个类别）。</p><p>第一个bounding box的置信度乘以该grid cell的20个类条件概率：<br><img src="/images/yolo1_10.png" alt=""><br><img src="image-9.png" alt="alt text"><br>得到第一个bounding box的后验概率。</p><p>第二个bounding box的置信度乘以该grid cell的20个类条件概率：<br><img src="/images/yolo1_11.png" alt=""><br><img src="image-10.png" alt="alt text"><br>得到第二个bounding box的后验概率。</p><p>每个grid cell就能获得2个<strong>20个后验概率</strong>：<br><img src="/images/yolo1_12.png" alt=""><br><img src="image-11.png" alt="alt text"></p><p>7x7=49个grid cell就能获得7x7x2=98个<strong>20个后验概率</strong>：<br><img src="/images/yolo1_13.png" alt=""><br><img src="image-12.png" alt="alt text"></p><p>也就是我们获得了这个可视化图：<br><img src="/images/yolo1_9.png" alt=""><br><img src="image-8.png" alt="alt text"></p><p>接下来就是进行后处理得到目标检测结果图。</p><p>98个<strong>20个后验概率</strong>，称其为98个向量，每个向量是20x1的。假设这98个向量每个的第一个值为是狗的后验概率，也就是说是狗的后验概率的值有98个，在这些后验概率中有可能有很多接近于0的，设置一个阈值，假如设为0.2，那么小于0.2的值直接置为0。然后基于上一步处理后的是狗的后验概率对这98个后验概率进行降序排序，然后使用<strong>NMS非极大值抑制</strong>算法再次进行处理。</p><p><img src="/images/yolo1_14.png" alt=""><br><img src="image-13.png" alt="alt text"></p><p>先把第一个后验概率值取出来，也就是最大的后验概率，把它与其他97个后验概率值进行比较，计算它们的IoU（交并比，也就是度量它们的重叠程度）大于某个阈值，那么就认为它们重复识别了一个物体，就把低后验概率的值过滤掉也就是置为0。</p><ul><li>如果这个阈值设得很低，那么NMS非极大值抑制是很强的，它把IoU压得很低，稍微有一点重合就被过滤了</li><li>如果这个阈值设得很高，那么它们的IoU在更大的情况下才可能被过滤掉</li></ul><p>因此如果想增强NMS非极大值抑制就可以设置低阈值。</p><p>然后经过一轮后，第一个后验概率与其他97个后验概率经过了一轮比较，有部分已经被置为0了。然后去找下一个未被置为0的后验概率，接着与后面的后验概率进行比较，与上面相同。</p><p>上面只是对狗这个类别进行了NMS非极大值抑制，对于其他类别也要进行此操作。</p><p>上面的后处理<strong>只在预测阶段进行</strong>，在<strong>训练阶段不需要进行后处理</strong>，因为每一个bounding box都需要在损失函数中占据一席之地，它会影响损失函数。</p><h1>4. 训练阶段（重点）</h1><p>目标检测是一个典型的<strong>监督学习</strong>的过程，训练集已经进行了人工标注，它有点类似于bounding box，但是称它为ground truth（也就是正确打标记的数据）。我们的算法就是要去拟合这些ground truth，使得损失函数最小化。</p><p>ground truth是标准答案，它的中心点落在哪个grid cell，就有哪个grid cell预测出的两个bounding box中的一个负责去拟合这个ground truth，并且这个grid cell输出的类别也应该是这个ground truth的类别（每一个grid cell中有20个类别的类条件概率，这20个类条件概率乘以每一个bounding box的置信度获得后验概率，其中最大的后验概率对应的那个类应与ground truth的类别相同）。每一个grid cell只能预测出一个物体，7x7个grid cell只能预测出49个物体（YOLO在预测小目标和密集目标性能差的原因，前面提过了，再重复一遍）。</p><p>一个grid cell预测出两个bounding box，那由哪个去负责拟合ground truth呢？由和ground truth交并比IoU更大的那个bounding box。因此损失函数设计就要做到让负责拟合ground truth的那个bounding box与ground truth尽可能得一致。</p><p>刚刚说的grid cell是有ground truth的中心点落在里面的grid cell。没有ground truth中心点落入的grid cell，其预测出的两个bounding box就都被忽略了。</p><p>接下来的工作就是构建YOLOV1的损失函数。</p><h2 id="4-1-损失函数">4.1 损失函数</h2><p>损失函数包含5项：<br><img src="/images/yolo1_15.png" alt=""><br><img src="image-14.png" alt="alt text"></p><p>这5项都是残差平方和的回归问题的损失函数。因此YOLO是把目标检测问题当作了回归问题解决。</p><p>第一项是负责预测物体的bounding box<strong>中心点定位的误差</strong>，也就是负责预测物体的bounding box的横纵坐标要和ground truth的横纵坐标尽可能的一致。</p><p>第二项是负责预测物体的bounding box<strong>宽高定位的误差</strong>，也就是负责预测物体的bounding box的宽高要和ground truth的宽高尽可能的一致。加根号是为了使得小框对误差更敏感（也就是同样的偏差小框造成的损失更大，大框造成的损失更小）。</p><p>第三项是负责检测物体的bounding box的<strong>置信度误差</strong>。标签值是bounding box与ground truth的IoU，预测值即置信度。</p><p>第四项是<strong>不</strong>负责检测物体的bounding box的<strong>置信度误差</strong>。也就是所有被忽略的bounding box它们的置信度最好都为0，即标签值最好为0。不负责检测物体的bounding box包含两类：</p><ul><li>负责检测物体的grid cell中被忽略的bounding box</li><li>本身就不负责检测物体的grid cell预测出的bounding box</li></ul><p>第五项是负责检测物体的grid cell的<strong>分类误差</strong>。也就是ground truth的中心点落入的那个grid cell，它的20个类条件概率的最大值所对应的类别应与ground truth相同，并且这个概率越接近1越好。</p><p>前两项是<strong>坐标回归误差</strong>，第三、四项是<strong>置信度Confidence回归误差</strong>，最后一项是<strong>类别预测误差</strong>。</p><h1>声明</h1><p>本文是学习<a href="https://www.bilibili.com/video/BV15w411Z7LG/?spm_id_from=333.1245.0.0">【精读AI论文】YOLO V1目标检测，看我就够了</a>的记录，点击即可跳转视频链接。</p><p>注：本文图片来源于视频以及论文中，侵权联系删。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;1. 目标检测综述&lt;/h1&gt;
+&lt;p&gt;目标检测分为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;one-stage detector（单阶段模型）
+&lt;ul&gt;
+&lt;li&gt;代表有Yolo、SSD、Retina-net&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;two-stage detector</summary>
+      
+    
+    
+    
+    <category term="Yolo" scheme="http://malone-ai.github.io/categories/Yolo/"/>
+    
+    
+    <category term="Yolo" scheme="http://malone-ai.github.io/tags/Yolo/"/>
+    
+  </entry>
   
   <entry>
     <title>project-test4</title>
@@ -508,34 +540,6 @@
     <category term="设计模式" scheme="http://malone-ai.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
     <category term="单例模式" scheme="http://malone-ai.github.io/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java开发环境搭建</title>
-    <link href="http://malone-ai.github.io/2025/03/01/java1/"/>
-    <id>http://malone-ai.github.io/2025/03/01/java1/</id>
-    <published>2025-03-01T09:36:40.000Z</published>
-    <updated>2025-03-07T12:42:10.422Z</updated>
-    
-    <content type="html"><![CDATA[<h1>1. JDK的下载与安装</h1><p>百度搜索JDK21到Oracle官网下载jdk21即可，需要注册账号。</p><p>下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用。</p><h1>2. jre 目录的生成</h1><p>准备配环境变量，突然发现jdk下没有jre目录。百度一搜发现需要手动生成jre。</p><ol><li>首先以管理员身份运行CMD</li><li>进入到jdk的安装目录</li><li>运行命令：</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin\jlink.exe --module-path jmods --add-modules java.desktop --output jre</span><br></pre></td></tr></table></figure><ol start="4"><li>此时会发现jre目录已经生成</li></ol><h1>3. 配置环境目录</h1><ol><li>编辑系统环境变量<ul><li>创建一个新的系统环境变量，名称为<code>JAVA_HOME</code>，值为java的安装路径</li></ul></li><li>配置PATH变量<ul><li>在PATH变量中添加<code>%JAVA_HOME%\bin</code></li><li>在PATH变量中添加<code>%JAVA_HOME%\jre\bin</code></li></ul></li><li>验证<ul><li>在cmd中输入<code>java -version</code></li><li>显示java的版本等信息即为成功</li></ul></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;1. JDK的下载与安装&lt;/h1&gt;
-&lt;p&gt;百度搜索JDK21到Oracle官网下载jdk21即可，需要注册账号。&lt;/p&gt;
-&lt;p&gt;下载好对应电脑版本的安装包后直接安装，记得把安装目录给记清楚，配置环境需要使用。&lt;/p&gt;
-&lt;h1&gt;2. jre 目录的生成&lt;/h1&gt;
-&lt;p&gt;准备</summary>
-      
-    
-    
-    
-    <category term="Java" scheme="http://malone-ai.github.io/categories/Java/"/>
-    
-    
-    <category term="Java" scheme="http://malone-ai.github.io/tags/Java/"/>
     
   </entry>
   
