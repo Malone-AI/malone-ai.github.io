@@ -569,11 +569,11 @@
       
         <tags>
             
-            <tag> C++ </tag>
-            
             <tag> 设计模式 </tag>
             
             <tag> 单例模式 </tag>
+            
+            <tag> C++ </tag>
             
         </tags>
       
@@ -1212,9 +1212,9 @@
             
             <tag> Leetcode 每日一题 </tag>
             
-            <tag> 数组 </tag>
-            
             <tag> 二分查找 </tag>
+            
+            <tag> 数组 </tag>
             
         </tags>
       
