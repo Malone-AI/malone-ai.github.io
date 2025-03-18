@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Springboot3 + Vue3 实现登陆注册</title>
+      <link href="/2025/03/17/project-test9/"/>
+      <url>/2025/03/17/project-test9/</url>
+      
+        <content type="html"><![CDATA[<h1>1. 前端搭建</h1><p>在vue/src/views目录下新建login.vue。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java 项目 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> Springboot </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Springboot3 + Vue3 实现 Excel 批量导出导入</title>
       <link href="/2025/03/17/project-test8/"/>
       <url>/2025/03/17/project-test8/</url>
