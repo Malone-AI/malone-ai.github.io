@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-03-17T15:57:44.136Z</updated>
+  <updated>2025-03-18T08:13:31.995Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>复盘一下最近（3月18日）</title>
+    <link href="http://malone-ai.github.io/2025/03/18/my-feelings4/"/>
+    <id>http://malone-ai.github.io/2025/03/18/my-feelings4/</id>
+    <published>2025-03-18T07:52:46.000Z</published>
+    <updated>2025-03-18T08:13:31.995Z</updated>
+    
+    <content type="html"><![CDATA[<p>自上上周听了入职美团的学长的建议，已经算是全面转Java了。JavaEE算是基本回了，和C++基本差不了多少，就是一些基本的数据结构和特性不一样，这几天一直在通过Leetcode算法题的方式来熟练。</p><p>学了很长一段时间的Springboot和Vue，主要是跟着B站视频做一个简单项目。复盘了一下，发现自己基本上一个1小时的视频能看一下午，究其原因，我归结为“钻牛角尖”，花了很大功夫在写博客记录上了，想着方便复习。但是确实是复习比较方便，但是效率并不是很高。</p><p>目前决定开始一下极简写博客方式，不太作过多解释，仅仅截图+三言两语。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;自上上周听了入职美团的学长的建议，已经算是全面转Java了。JavaEE算是基本回了，和C++基本差不了多少，就是一些基本的数据结构和特性不一样，这几天一直在通过Leetcode算法题的方式来熟练。&lt;/p&gt;
+&lt;p&gt;学了很长一段时间的Springboot和Vue，主要是跟着B</summary>
+      
+    
+    
+    
+    <category term="杂谈" scheme="http://malone-ai.github.io/categories/%E6%9D%82%E8%B0%88/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Springboot3 + Vue3 实现登陆注册</title>
@@ -439,11 +462,11 @@
   </entry>
   
   <entry>
-    <title>总结一下最近</title>
+    <title>总结一下最近（3月6日）</title>
     <link href="http://malone-ai.github.io/2025/03/06/my-feelings2/"/>
     <id>http://malone-ai.github.io/2025/03/06/my-feelings2/</id>
     <published>2025-03-06T10:01:04.000Z</published>
-    <updated>2025-03-06T12:28:59.197Z</updated>
+    <updated>2025-03-18T07:52:36.557Z</updated>
     
     <content type="html"><![CDATA[<p>回顾一下最近的一个月。2.6号还在家，天天刷着leetcode，看看github上的一些源码，偶尔自己写写，再有空写写博客。</p><p>2.13准备返校，但是突发了一些意外，请假了，最后放了同学鸽子（本来说好一起返校的），不过好在返校后请人家吃了一顿，应该也消气了。</p><p>2.24开始返校，返校后一直在修改简历，想要投递个实习。基本上每天都在学C++的一些新特性以及一些八股文相关，然后刷刷leetcode，写写博客。</p><p>中间甚至在学java和前端🤣。java不难，因为两年前学过，并且java的很多语法与C++类似，只不过java也有很多高级的特性，比如垃圾回收机制等等，当时一度感觉就是因为java的垃圾回收机制，C++才会有智能指针。前端主要是vue3，感觉它比html要强大太多了。</p><p>还有就是，目前写的不少博客，内容基本上是B站上视频的学习的记录或者学习其他的博客，然后进行一个整理。整理和记录视频是因为看视频来进行复习回顾确实费时费力不讨好。整理其他人的博客也是一个很费时的事，说他是造轮子感觉太高大上了，说是搬运工感觉更合适。不过不可否认自己学到了很多东西。</p><p>目前的想法是，对于其他人博客的学习，只提出转载声明然后提供跳转链接，不做过多的整理。但是貌似也不是一件容易的事儿，最怕的还是版权问题。自己消化理解后再撰写博客和那完全是两码事儿。目前没有更好的解决方案了😵。</p>]]></content>
     
@@ -548,32 +571,6 @@
     
     
     <category term="C++" scheme="http://malone-ai.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C++ 里的 lower_bound 和 upper_bound</title>
-    <link href="http://malone-ai.github.io/2025/03/04/chores1/"/>
-    <id>http://malone-ai.github.io/2025/03/04/chores1/</id>
-    <published>2025-03-04T15:20:21.000Z</published>
-    <updated>2025-03-06T03:16:40.738Z</updated>
-    
-    <content type="html"><![CDATA[<p>在 C++ 中，lower_bound 和 upper_bound 是标准库 <algorithm> 中提供的两个非常实用的函数，用于在已排序的序列中进行二分查找。它们的功能和用法非常相似，但在细节上有一些区别。</p><h1>使用条件</h1><p>由于 lower_bound 和 upper_bound 底层是基于二分查找的，故lower_bound 和 upper_bound 都要求输入的序列是已排序的（默认是升序）。</p><h1>lower_bound 的功能</h1><p>lower_bound 用于在已排序的序列中查找第一个大于或等于目标值的元素的位置。通俗地讲，就是在这个序列中为目标值找一个位置。</p><p>函数原型1：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> ForwardIterator, <span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function">ForwardIterator <span class="title">lower_bound</span><span class="params">(ForwardIterator first, ForwardIterator last, <span class="type">const</span> T&amp; value)</span></span>;</span><br></pre></td></tr></table></figure><p>函数原型2：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">ForwardIterator</span>, <span class="keyword">class</span> <span class="title class_">T</span>, <span class="keyword">class</span> <span class="title class_">Compare</span>&gt;</span><br><span class="line"><span class="function">ForwardIterator <span class="title">lower_bound</span> <span class="params">(ForwardIterator first, ForwardIterator last, <span class="type">const</span> T&amp; val, Compare comp)</span></span>;</span><br></pre></td></tr></table></figure><ul><li>first 和 last：定义查找范围的迭代器，范围是 [first, last)。</li><li>value：要查找的目标值。</li><li>comp：comp 就是一个比较器，可以传仿函数对象，也可以传函数指针，类似于qsort里的cmp。</li><li>返回值：指向第一个大于或等于 value 的元素的迭代器。如果所有元素都小于 value，则返回 last。</li></ul><p>测试代码：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; nums = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>&#125;;</span><br><span class="line">    <span class="type">int</span> target = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> it = std::<span class="built_in">lower_bound</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), target);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (it != nums.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;First element &gt;= &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; is &quot;</span> &lt;&lt; *it &lt;&lt; <span class="string">&quot; at index &quot;</span> &lt;&lt; (it - nums.<span class="built_in">begin</span>()) &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;No element &gt;= &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; found.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>程序的输出结果为：</p><pre><code>First element &gt;= 6 is 7 at index 3</code></pre><h1>upper_bound 的功能</h1><p>upper_bound 用于在已排序的序列中查找第一个大于目标值的元素的位置。</p><p>函数原型1：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> ForwardIterator, <span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function">ForwardIterator <span class="title">upper_bound</span><span class="params">(ForwardIterator first, ForwardIterator last, <span class="type">const</span> T&amp; value)</span></span>;</span><br></pre></td></tr></table></figure><p>函数原型2：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> ForwardIterator, <span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function">ForwardIterator <span class="title">upper_bound</span><span class="params">(ForwardIterator first, ForwardIterator last, <span class="type">const</span> T&amp; value, Compare comp)</span></span>;</span><br></pre></td></tr></table></figure><ul><li>first 和 last：定义查找范围的迭代器，范围是 [first, last)。</li><li>value：要查找的目标值。</li><li>comp：comp 就是一个比较器，可以传仿函数对象，也可以传函数指针，类似于qsort里的cmp。</li><li>返回值：指向第一个大于 value 的元素的迭代器。如果所有元素都小于或等于 value，则返回 last。</li></ul><p>参数与lower_bound相同，返回值就不同了。</p><p>测试代码：</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; nums = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>&#125;;</span><br><span class="line">    <span class="type">int</span> target = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> it = std::<span class="built_in">upper_bound</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), target);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (it != nums.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;First element &gt; &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; is &quot;</span> &lt;&lt; *it &lt;&lt; <span class="string">&quot; at index &quot;</span> &lt;&lt; (it - nums.<span class="built_in">begin</span>()) &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;No element &gt; &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; found.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>程序的输出结果为：</p><pre><code>First element &gt; 6 is 7 at index 3</code></pre><h1>lower_bound 和 upper_bound 的区别</h1><table><thead><tr><th>特性</th><th><code>lower_bound</code></th><th><code>upper_bound</code></th></tr></thead><tbody><tr><td><strong>查找条件</strong></td><td>第一个 <strong>大于或等于</strong> 目标值的元素</td><td>第一个 <strong>大于</strong> 目标值的元素</td></tr><tr><td><strong>返回值</strong></td><td>指向第一个满足条件的元素的迭代器</td><td>指向第一个满足条件的元素的迭代器</td></tr><tr><td><strong>目标值存在时</strong></td><td>返回目标值的第一个位置</td><td>返回目标值的下一个位置</td></tr><tr><td><strong>目标值不存在时</strong></td><td>返回第一个大于目标值的位置</td><td>返回第一个大于目标值的位置</td></tr></tbody></table>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;在 C++ 中，lower_bound 和 upper_bound 是标准库 &lt;algorithm&gt; 中提供的两个非常实用的函数，用于在已排序的序列中进行二分查找。它们的功能和用法非常相似，但在细节上有一些区别。&lt;/p&gt;
-&lt;h1&gt;使用条件&lt;/h1&gt;
-&lt;p&gt;由于 lower_</summary>
-      
-    
-    
-    
-    <category term="C/C++ 那些事儿" scheme="http://malone-ai.github.io/categories/C-C-%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/"/>
-    
-    
-    <category term="C/C++" scheme="http://malone-ai.github.io/tags/C-C/"/>
     
   </entry>
   

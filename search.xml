@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>复盘一下最近（3月18日）</title>
+      <link href="/2025/03/18/my-feelings4/"/>
+      <url>/2025/03/18/my-feelings4/</url>
+      
+        <content type="html"><![CDATA[<p>自上上周听了入职美团的学长的建议，已经算是全面转Java了。JavaEE算是基本回了，和C++基本差不了多少，就是一些基本的数据结构和特性不一样，这几天一直在通过Leetcode算法题的方式来熟练。</p><p>学了很长一段时间的Springboot和Vue，主要是跟着B站视频做一个简单项目。复盘了一下，发现自己基本上一个1小时的视频能看一下午，究其原因，我归结为“钻牛角尖”，花了很大功夫在写博客记录上了，想着方便复习。但是确实是复习比较方便，但是效率并不是很高。</p><p>目前决定开始一下极简写博客方式，不太作过多解释，仅仅截图+三言两语。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Springboot3 + Vue3 实现登陆注册</title>
       <link href="/2025/03/17/project-test9/"/>
       <url>/2025/03/17/project-test9/</url>
@@ -403,7 +422,7 @@
     
     
     <entry>
-      <title>总结一下最近</title>
+      <title>总结一下最近（3月6日）</title>
       <link href="/2025/03/06/my-feelings2/"/>
       <url>/2025/03/06/my-feelings2/</url>
       
@@ -731,11 +750,11 @@
       
         <tags>
             
-            <tag> C++ </tag>
-            
             <tag> 设计模式 </tag>
             
             <tag> 单例模式 </tag>
+            
+            <tag> C++ </tag>
             
         </tags>
       
