@@ -6,7 +6,7 @@
   <link href="http://malone-ai.github.io/atom.xml" rel="self"/>
   
   <link href="http://malone-ai.github.io/"/>
-  <updated>2025-04-09T15:43:07.058Z</updated>
+  <updated>2025-04-09T15:53:50.878Z</updated>
   <id>http://malone-ai.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>red-black-tree3</title>
+    <title>红黑树右旋</title>
     <link href="http://malone-ai.github.io/2025/04/09/red-black-tree3/"/>
     <id>http://malone-ai.github.io/2025/04/09/red-black-tree3/</id>
     <published>2025-04-09T15:19:27.000Z</published>
-    <updated>2025-04-09T15:43:07.058Z</updated>
+    <updated>2025-04-09T15:53:50.878Z</updated>
     
     <content type="html"><![CDATA[<p>今天继续学习红黑树。</p><p>如有错误望大家指正🧐。</p><hr><p>红黑树有几个<strong>关键性质</strong>：</p><ol><li>每个节点是红色或黑色；</li><li>根节点是黑色；</li><li>叶子节点（NIL）是黑色；</li><li>红色节点的子节点必须是黑色；</li><li>从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。</li></ol><p>这些性质保证了红黑树的平衡性，这些性质很重要，每回都来重温一下。</p><hr><p>上回已经学习了红黑树的左旋操作，这回来学习红黑树的右旋操作。右旋操作其实与左旋操作是对称，根本不需要讲。但是这种水文章的大好机会我怎么能轻易放过？</p><hr><p>本回主要关注<strong>右旋</strong>操作。</p><p>右旋的目的是<strong>将节点 y 与其左子节点 x 的位置进行旋转，使 x 成为新的父节点，y 成为 x 的右子节点</strong>。</p><p>伪代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">RIGHT-ROTATE(T, x)</span><br><span class="line">    y = x.left              // 将x的左孩子保存为y</span><br><span class="line">    x.left = y.right        // 将y的右孩子设为x的新左孩子</span><br><span class="line">    <span class="keyword">if</span> y.right != T.nil     // 如果y的右孩子存在</span><br><span class="line">        y.right.p = x       // 更新该右孩子的父指针指向x</span><br><span class="line">    y.p = x.p               // 将y的父指针设为x的父节点，y取代x的位置</span><br><span class="line">    <span class="keyword">if</span> x.p == T.nil         // 如果x是根节点</span><br><span class="line">        T.root = y          // 更新根节点为y</span><br><span class="line">    <span class="keyword">elif</span> x == x.p.left      // 如果x是其父节点的左孩子</span><br><span class="line">        x.p.left = y        // 父节点的左孩子指向y</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        x.p.right = y       // 父节点的右孩子指向y</span><br><span class="line">    y.right = x             // 将y的右孩子设为x</span><br><span class="line">    x.p = y                 // 更新x的父节点为y</span><br></pre></td></tr></table></figure>]]></content>
     
