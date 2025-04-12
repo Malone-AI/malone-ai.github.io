@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>红黑树的插入 | YOLO</title><meta name="author" content="Malone"><meta name="copyright" content="Malone"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="昨天事儿有点多，断更一次。今天感觉也快断更了，马上0点了。 今天继续学习红黑树。 如有错误望大家指正🧐。  老规矩先重温（红温了要🤣）红黑树的性质。 红黑树有几个关键性质：  每个节点是红色或黑色； 根节点是黑色； 叶子节点（NIL）是黑色； 红色节点的子节点必须是黑色； 从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。  这些性质保证了红黑树的平衡性，这些性质很重要，每回都来重温一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红黑树的插入">
+<meta property="og:url" content="http://malone-ai.github.io/2025/04/12/red-black-tree4/index.html">
+<meta property="og:site_name" content="YOLO">
+<meta property="og:description" content="昨天事儿有点多，断更一次。今天感觉也快断更了，马上0点了。 今天继续学习红黑树。 如有错误望大家指正🧐。  老规矩先重温（红温了要🤣）红黑树的性质。 红黑树有几个关键性质：  每个节点是红色或黑色； 根节点是黑色； 叶子节点（NIL）是黑色； 红色节点的子节点必须是黑色； 从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。  这些性质保证了红黑树的平衡性，这些性质很重要，每回都来重温一下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://malone-ai.github.io/images/doge.jpg">
+<meta property="article:published_time" content="2025-04-12T15:48:12.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:59:09.897Z">
+<meta property="article:author" content="Malone">
+<meta property="article:tag" content="红黑树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://malone-ai.github.io/images/doge.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "红黑树的插入",
+  "url": "http://malone-ai.github.io/2025/04/12/red-black-tree4/",
+  "image": "http://malone-ai.github.io/images/doge.jpg",
+  "datePublished": "2025-04-12T15:48:12.000Z",
+  "dateModified": "2025-04-12T15:59:09.897Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Malone",
+      "url": "http://malone-ai.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://malone-ai.github.io/2025/04/12/red-black-tree4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '红黑树的插入',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="YOLO" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">73</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/background.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">YOLO</span></a><a class="nav-page-title" href="/"><span class="site-name">红黑树的插入</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">红黑树的插入</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-12T15:48:12.000Z" title="发表于 2025-04-12 23:48:12">2025-04-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-12T15:59:09.897Z" title="更新于 2025-04-12 23:59:09">2025-04-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>昨天事儿有点多，断更一次。今天感觉也快断更了，马上0点了。</p>
+<p>今天继续学习红黑树。</p>
+<p>如有错误望大家指正🧐。</p>
+<hr>
+<p>老规矩先重温（红温了要🤣）红黑树的性质。</p>
+<p>红黑树有几个<strong>关键性质</strong>：</p>
+<ol>
+<li>每个节点是红色或黑色；</li>
+<li>根节点是黑色；</li>
+<li>叶子节点（NIL）是黑色；</li>
+<li>红色节点的子节点必须是黑色；</li>
+<li>从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。</li>
+</ol>
+<p>这些性质保证了红黑树的平衡性，这些性质很重要，每回都来重温一下。</p>
+<hr>
+<p>红黑树插入分为两步，先按照二叉搜索树规则插入新节点。插入节点后红黑树的性质会被破坏，一般是破坏性质4（通过后续讲解就会明白得更清晰）。因此再通过调整颜色和旋转恢复红黑树性质。</p>
+<p>先来看插入的伪代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">RB-INSERT(T, z):                     <span class="comment"># 向红黑树 T 中插入节点 z</span></span><br><span class="line">    <span class="comment"># --- 第1部分：二叉搜索树插入 ---</span></span><br><span class="line">    y = T.nil                         <span class="comment"># 初始化 y 为哨兵节点（用于跟踪插入位置的父节点）</span></span><br><span class="line">    x = T.root                        <span class="comment"># 从根节点开始查找插入位置</span></span><br><span class="line">    <span class="keyword">while</span> x != T.nil:                 <span class="comment"># 循环直到找到叶子节点（哨兵节点）</span></span><br><span class="line">        y = x                         <span class="comment"># 保存当前节点 x 作为父节点候选</span></span><br><span class="line">        <span class="keyword">if</span> z.key &lt; x.key:             <span class="comment"># 若插入键小于当前节点键值</span></span><br><span class="line">            x = x.left                <span class="comment"># 向左子树查找</span></span><br><span class="line">        <span class="keyword">else</span>:                         <span class="comment"># 否则（插入键大于等于当前节点键值）</span></span><br><span class="line">            x = x.right               <span class="comment"># 向右子树查找</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 插入新节点 z ---</span></span><br><span class="line">    z.p = y                           <span class="comment"># 将 z 的父节点设为 y（此时 y 是插入位置的父节点）</span></span><br><span class="line">    <span class="keyword">if</span> y == T.nil:                    <span class="comment"># 若树为空（y 仍为哨兵）</span></span><br><span class="line">        T.root = z                    <span class="comment"># 将 z 设为根节点</span></span><br><span class="line">    <span class="keyword">elif</span> z.key &lt; y.key:               <span class="comment"># 若 z 的键值小于父节点的键值</span></span><br><span class="line">        y.left = z                    <span class="comment"># 将 z 设为父节点的左孩子节点</span></span><br><span class="line">    <span class="keyword">else</span>:                             <span class="comment"># 否则z 的键值大于等于父节点的键值</span></span><br><span class="line">        y.right = z                   <span class="comment"># 将 z 设为父节点的右孩子节点</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 初始化新节点属性 ---</span></span><br><span class="line">    z.left = T.nil                    <span class="comment"># 左孩子节点设为哨兵</span></span><br><span class="line">    z.right = T.nil                   <span class="comment"># 右孩子节点设为哨兵</span></span><br><span class="line">    z.color = RED                     <span class="comment"># 新节点初始颜色设为红色</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># --- 修复红黑树性质 ---</span></span><br><span class="line">    RB-INSERT-FIXUP(T, z)             <span class="comment"># 调用修复函数处理颜色和旋转</span></span><br></pre></td></tr></table></figure>
+<p>然后是对红黑树进行调整的伪代码，调用RB-INSERT-FIXUP：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">RB-INSERT-FIXUP(T, z):</span><br><span class="line">    <span class="keyword">while</span> z.p.color == RED:           <span class="comment"># 循环条件：父节点为红色（违反红黑树性质）</span></span><br><span class="line">        <span class="comment"># --- 父节点是祖父的左孩子 ---</span></span><br><span class="line">        <span class="keyword">if</span> z.p == z.p.p.left:        若父节点是左子</span><br><span class="line">            y = z.p.p.right           <span class="comment"># y 是叔节点（祖父的右孩子）</span></span><br><span class="line">            <span class="comment"># Case 1: 叔节点为红色</span></span><br><span class="line">            <span class="keyword">if</span> y.color == RED:        <span class="comment"># 若叔节点是红色</span></span><br><span class="line">                z.p.color = BLACK     <span class="comment"># 将父节点设为黑色</span></span><br><span class="line">                y.color = BLACK       <span class="comment"># 将叔节点设为黑色</span></span><br><span class="line">                z.p.p.color = RED     <span class="comment"># 将祖父节点设为红色</span></span><br><span class="line">                z = z.p.p             <span class="comment"># 将 z 上移到祖父节点（继续向上修复）</span></span><br><span class="line">            <span class="comment"># Case 2/3: 叔节点为黑色</span></span><br><span class="line">            <span class="keyword">else</span>:                     </span><br><span class="line">                <span class="comment"># Case 2: z 是右孩子 → 转为 Case 3</span></span><br><span class="line">                <span class="keyword">if</span> z == z.p.right:    <span class="comment"># 若 z 是父节点的右孩子</span></span><br><span class="line">                    z = z.p           <span class="comment"># 将 z 上移到父节点</span></span><br><span class="line">                    LEFT-ROTATE(T, z) <span class="comment"># 对 z 进行左旋，使 z 成为左孩子</span></span><br><span class="line">                <span class="comment"># Case 3: z 是左孩子 → 旋转和变色</span></span><br><span class="line">                z.p.color = BLACK     <span class="comment"># 将父节点设为黑色</span></span><br><span class="line">                z.p.p.color = RED     <span class="comment"># 将祖父节点设为红色</span></span><br><span class="line">                RIGHT-ROTATE(T, z.p.p) <span class="comment"># 对祖父节点右旋以恢复红黑树性质</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># --- 父节点是祖父的右孩子（对称逻辑）---</span></span><br><span class="line">        <span class="keyword">else</span>:                         </span><br><span class="line">            y = z.p.p.left            <span class="comment"># y 是叔节点（祖父的左孩子）</span></span><br><span class="line">            <span class="comment"># Case 1: 叔节点为红色</span></span><br><span class="line">            <span class="keyword">if</span> y.color == RED:        </span><br><span class="line">                z.p.color = BLACK     </span><br><span class="line">                y.color = BLACK       </span><br><span class="line">                z.p.p.color = RED     </span><br><span class="line">                z = z.p.p             </span><br><span class="line">            <span class="comment"># Case 3: 叔节点为黑色</span></span><br><span class="line">            <span class="keyword">else</span>:                     </span><br><span class="line">                <span class="comment"># Case 2: z 是左子 → 转为 Case 3</span></span><br><span class="line">                <span class="keyword">if</span> z == z.p.left:     </span><br><span class="line">                    z = z.p           </span><br><span class="line">                    RIGHT-ROTATE(T, z) <span class="comment"># 对 z 右旋</span></span><br><span class="line">                <span class="comment"># Case 3: z 是右子 → 旋转和变色</span></span><br><span class="line">                z.p.color = BLACK     </span><br><span class="line">                z.p.p.color = RED     </span><br><span class="line">                LEFT-ROTATE(T, z.p.p) <span class="comment"># 对祖父节点左旋</span></span><br><span class="line">    </span><br><span class="line">    T.root.color = BLACK              <span class="comment"># 令根节点始终为黑色</span></span><br></pre></td></tr></table></figure>
+<p>（不得不提一句，markdown插入伪代码还得是python😁🧐）。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io">Malone</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://malone-ai.github.io/2025/04/12/red-black-tree4/">http://malone-ai.github.io/2025/04/12/red-black-tree4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://malone-ai.github.io" target="_blank">YOLO</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/">红黑树</a></div><div class="post-share"><div class="social-share" data-image="/images/doge.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/04/07/red-black-tree1/" title="为什么一棵有n个内部节点的红黑树的高度至多为2log(n + 1)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-07</div><div class="info-item-2">为什么一棵有n个内部节点的红黑树的高度至多为2log(n + 1)</div></div><div class="info-2"><div class="info-item-1">好久没更新博客了，大概有17天左右。今天小更一波。 要讨论的内容是为什么一棵有n个内部节点的红黑树的高度至多为2log(n +...</div></div></div></a><a class="pagination-related" href="/2025/04/08/red-black-tree2/" title="红黑树的左旋"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-08</div><div class="info-item-2">红黑树的左旋</div></div><div class="info-2"><div class="info-item-1">今天继续学习红黑树。 如有错误望大家指正🧐。  上回说到红黑树有几个关键性质：  每个节点是红色或黑色； 根节点是黑色； 叶子节点（NIL）是黑色； 红色节点的子节点必须是黑色； 从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。  这些性质保证了红黑树的平衡性。 并且说到了一个具有n个内部节点的红黑树的高度h≤2log(n + 1)，也就是O(log n)。因此红黑树的插入和删除都可以在O(log n)的时间内完成。 但是插入和删除操作必然会破坏红黑树的结构，使其不满足上述5条性质。 为了维护这些性质，就需要修改红黑树中某些节点的颜色以及指针的结构。 其中，指针结构的修改涉及到两种操作：左旋和右旋。  本回主要关注左旋操作。 左旋的目的是将节点 x 与其右子节点 y 的位置进行旋转，使 y 成为新的父节点，x 成为 y 的左子节点。 伪代码如下： 1234567891011121314LEFT-ROTATE(T, x)    y = x.right             // 将x的右孩子保存为y    x.right = y.left        //...</div></div></div></a><a class="pagination-related" href="/2025/04/09/red-black-tree3/" title="红黑树右旋"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-09</div><div class="info-item-2">红黑树右旋</div></div><div class="info-2"><div class="info-item-1">今天继续学习红黑树。 如有错误望大家指正🧐。  红黑树有几个关键性质：  每个节点是红色或黑色； 根节点是黑色； 叶子节点（NIL）是黑色； 红色节点的子节点必须是黑色； 从任一节点到其所有叶子节点的路径包含相同数量的黑色节点。  这些性质保证了红黑树的平衡性，这些性质很重要，每回都来重温一下。  上回已经学习了红黑树的左旋操作，这回来学习红黑树的右旋操作。右旋操作其实与左旋操作是对称，根本不需要讲。但是这种水文章的大好机会我怎么能轻易放过？  本回主要关注右旋操作。 右旋的目的是将节点 y 与其左子节点 x 的位置进行旋转，使 x 成为新的父节点，y 成为 x 的右子节点。 伪代码如下： 1234567891011121314RIGHT-ROTATE(T, x)    y = x.left              // 将x的左孩子保存为y    x.left = y.right        // 将y的右孩子设为x的新左孩子    if y.right != T.nil     // 如果y的右孩子存在        y.right.p = x       //...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/doge.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Malone</div><div class="author-info-description">心之所向，素履以往</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">73</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Malone-AI"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Hello, World | Malone</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/12/red-black-tree4/" title="红黑树的插入">红黑树的插入</a><time datetime="2025-04-12T15:48:12.000Z" title="发表于 2025-04-12 23:48:12">2025-04-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/09/red-black-tree3/" title="红黑树右旋">红黑树右旋</a><time datetime="2025-04-09T15:19:27.000Z" title="发表于 2025-04-09 23:19:27">2025-04-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/08/red-black-tree2/" title="红黑树的左旋">红黑树的左旋</a><time datetime="2025-04-08T15:21:30.000Z" title="发表于 2025-04-08 23:21:30">2025-04-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/red-black-tree1/" title="为什么一棵有n个内部节点的红黑树的高度至多为2log(n + 1)">为什么一棵有n个内部节点的红黑树的高度至多为2log(n + 1)</a><time datetime="2025-04-07T04:45:31.000Z" title="发表于 2025-04-07 12:45:31">2025-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/19/my-feelings5/" title="失眠">失眠</a><time datetime="2025-03-19T04:18:44.000Z" title="发表于 2025-03-19 12:18:44">2025-03-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Malone</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
